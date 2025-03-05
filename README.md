@@ -2,10 +2,10 @@
 
 Team Members:
 
-*
-*
-*
-*
+* Cynthia Yan
+* Ethan Woolbert
+* Samantha Livingston
+* Cara Conforti
 
 For each iteration you should answer the following:
 
