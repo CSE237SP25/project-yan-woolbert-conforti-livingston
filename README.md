@@ -10,6 +10,7 @@ Team Members:
 For each iteration you should answer the following:
 
 What user stories were completed this iteration?
+-A user can now make a withdrawal.
 
 What user stories do you intend to complete next iteration?
 
