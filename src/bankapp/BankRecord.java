@@ -9,13 +9,13 @@ public class BankRecord {
 	// Private variable declarations
 	private Map<Integer, ArrayList<Integer>> userIDAccountIDs;
 	private Map<Integer, BankCustomer> userIDCustomer;
-	private Map<Integer, ArrayList<BankAccount>> userIDAccounts;
+	private Map<Integer, BankAccount> accountIDAccounts;
 	
 	// Default constructor for BankRecord
 	public BankRecord() {
 		this.userIDAccountIDs = new HashMap<>();
 		this.userIDCustomer = new HashMap<>();
-		this.userIDAccounts = new HashMap<>();
+		this.accountIDAccounts = new HashMap<>();
 	}
 	
 	//Getters for all hashMaps
@@ -27,8 +27,8 @@ public class BankRecord {
 		return userIDCustomer;
 	}
 
-	public Map<Integer, ArrayList<BankAccount>> getUserIDAccounts() {
-		return userIDAccounts;
+	public Map<Integer, BankAccount> getAccountIDAccounts() {
+		return accountIDAccounts;
 	}
 
 	// Add user accounts, BankCustomer objects, and BankRecord objects to their respective HashMaps	
@@ -42,19 +42,20 @@ public class BankRecord {
 		}
 	}
 
-	public void addAccount(int userID, BankAccount account) {
+	public void addAccount(int userID, int accountID, BankAccount account) {
 		if(getUserIDAccountIDs().containsKey(userID)) {
-			if (getUserIDAccounts().get(userID).contains(account)) {
+			if (getAccountIDAccounts().values().contains(account) || getAccountIDAccounts().containsKey(accountID)) {
 				throw new IllegalArgumentException();
 			}
 			else {
-			getUserIDAccounts().get(userID).add(account);
+			accountIDAccounts.put(accountID, account);
+			userIDAccountIDs.get(userID).add(accountID);
 			}
 		}
 		else {
 		userIDAccountIDs.put(userID, new ArrayList<Integer>());
-		userIDAccounts.put(userID, new ArrayList<BankAccount>());
-		getUserIDAccounts().get(userID).add(account);
+		userIDAccountIDs.get(userID).add(accountID);
+		accountIDAccounts.put(accountID, account);
 		}
 	}
 
