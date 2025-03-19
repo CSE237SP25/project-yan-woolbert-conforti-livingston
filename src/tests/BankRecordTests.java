@@ -117,24 +117,24 @@ public class BankRecordTests {
 	}
 
 
-@Test
-public void addMultipleAccountsWithSameID() {
-	//1. Create objects to be tested
-	BankRecord record = new BankRecord();
-	BankAccount account1 = new BankAccount();
-	BankAccount account2 = new BankAccount();
+	@Test
+	public void addMultipleAccountsWithSameID() {
+		// 1. Create objects to be tested
+		BankRecord record = new BankRecord();
+		BankAccount account1 = new BankAccount();
+		BankAccount account2 = new BankAccount();
 
-	//2. Call methods to be tested
-	//3. Use assertions to verify results
-	try {
-		record.addAccount(123, 1, account1);
-		record.addAccount(123, 1, account2);
-		fail();
-	} catch (IllegalArgumentException e) {
-		assertTrue(e != null);
+		// 2. Call methods to be tested
+		// 3. Use assertions to verify results
+		try {
+			record.addAccount(123, 1, account1);
+			record.addAccount(123, 1, account2);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		}
+
+		assertEquals(record.getAccountIDAccounts().get(2), null);
+		assertEquals(record.getAccountIDAccounts().get(1), account1);
 	}
-	
-	assertEquals(record.getAccountIDAccounts().get(2), null);
-	assertEquals(record.getAccountIDAccounts().get(1), account1);
-}
 }
