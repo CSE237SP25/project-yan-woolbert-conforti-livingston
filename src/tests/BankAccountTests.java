@@ -4,9 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import bankapp.BankAccount;
+import bankapp.BankCustomer;
+import bankapp.BankRecord;
 
 public class BankAccountTests {
 
@@ -75,5 +81,32 @@ public class BankAccountTests {
 		} catch (IllegalArgumentException e) {
 			assertTrue(e != null);
 		}
+	}
+	@Test
+	public void testUniqueAccountID() {
+		BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("Alice");
+        bankRecord.addUser(customer.getUserID(), customer);
+        int userID = customer.getUserID();
+
+        // Create multiple accounts
+        int accountID1 = customer.addNewAccount(bankRecord);
+        int accountID2 = customer.addNewAccount(bankRecord);
+        int accountID3 = customer.addNewAccount(bankRecord);
+
+        // Collect account IDs in a Set (ensures uniqueness)
+        Set<Integer> accountIDs = new HashSet<>();
+        accountIDs.add(accountID1);
+        accountIDs.add(accountID2);
+        accountIDs.add(accountID3);
+
+        // Verify that all account IDs are unique
+        assertEquals(3, accountIDs.size());
+
+        // Ensure the created account IDs are correctly stored
+        List<Integer> userAccounts = customer.getUserAccounts(bankRecord);
+        assertTrue(userAccounts.contains(accountID1));
+        assertTrue(userAccounts.contains(accountID2));
+        assertTrue(userAccounts.contains(accountID3));
 	}
 }

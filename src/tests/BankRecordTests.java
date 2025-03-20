@@ -137,4 +137,5 @@ public class BankRecordTests {
 		assertEquals(record.getAccountIDAccounts().get(2), null);
 		assertEquals(record.getAccountIDAccounts().get(1), account1);
 	}
+	
 }

@@ -1,5 +1,7 @@
 package bankapp;
 
+import java.util.ArrayList;
+
 public class BankCustomer {
 	// Create variable corresponding to number of bank customer (will be used for user id)
 	static int numberOfBankCustomers = 0;
@@ -27,5 +29,14 @@ public class BankCustomer {
 	
 	public int getUserID() {
 		return this.userID;
+	}
+	public  ArrayList<Integer> getUserAccounts(BankRecord bankRecord) {
+		ArrayList<Integer> accountIDs = bankRecord.getUserIDAccountIDs().get(this.userID);
+		return accountIDs;
+	}
+	public int addNewAccount(BankRecord bankRecord) {
+        BankAccount newAccount = new BankAccount();
+        bankRecord.addAccount(this.userID, newAccount.getAccountID(), newAccount);
+        return newAccount.getAccountID();
 	}
 }
