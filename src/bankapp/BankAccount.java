@@ -1,10 +1,12 @@
 package bankapp;
 
 public class BankAccount {
-
+	private static int numberOfAccounts = 0;
+	private int accountID;
 	private double balance;
 	
 	public BankAccount() {
+		this.accountID = numberOfAccounts++;
 		this.balance = 0;
 	}
 	
@@ -30,5 +32,9 @@ public class BankAccount {
 	
 	public double getCurrentBalance() {
 		return this.balance;
+	}
+	
+	public int getAccountID() {
+		return this.accountID;
 	}
 }
