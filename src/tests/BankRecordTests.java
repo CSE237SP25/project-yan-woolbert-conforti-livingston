@@ -1,6 +1,9 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -137,5 +140,57 @@ public class BankRecordTests {
 		assertEquals(record.getAccountIDAccounts().get(2), null);
 		assertEquals(record.getAccountIDAccounts().get(1), account1);
 	}
+	@Test
+    void testDeleteAccount() {
+		BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("Alice");
+        bankRecord.addUser(customer.getUserID(), customer);
+        int userID = customer.getUserID();
+        int accountID = customer.addNewAccount(bankRecord);
+        BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
+
+        // Verify account exists before deletion
+        assertTrue(bankRecord.getUserIDAccountIDs().get(userID).contains(account.getAccountID()));
+
+        // Delete the account
+        bankRecord.deleteAccount(userID, account.getAccountID());
+
+        // Verify account is removed
+        assertFalse(bankRecord.getUserIDAccountIDs().get(userID).contains(account.getAccountID()));
+        assertNull(bankRecord.getAccountIDAccounts().get(account.getAccountID()));
+    }
+
+    @Test
+    void testDeleteNonExistentAccount() {
+    	BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("Alice");
+        bankRecord.addUser(customer.getUserID(), customer);
+        int userID = customer.getUserID();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            bankRecord.deleteAccount(userID, 9999);
+        });
+
+        assertEquals("Account ID does not exist", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteAccountNotOwnedByUser() {
+    	BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("Alice");
+        bankRecord.addUser(customer.getUserID(), customer);
+        BankCustomer anotherCustomer = new BankCustomer("Bob");
+        bankRecord.addUser(anotherCustomer.getUserID(), anotherCustomer);
+        int userID = customer.getUserID();
+        int accountID = customer.addNewAccount(bankRecord);
+        BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
+
+        // Try deleting Alice's account as Bob
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            bankRecord.deleteAccount(anotherCustomer.getUserID(), account.getAccountID());
+        });
+
+        assertEquals("This account does not belong to the user", exception.getMessage());
+    }
 	
 }
