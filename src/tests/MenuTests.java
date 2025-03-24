@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import bankapp.BankCustomer;
+import bankapp.BankRecord;
 import bankapp.Menu;
 
 public class MenuTests {
@@ -13,12 +14,14 @@ public class MenuTests {
 	public void testSignUpNewCustomer() {
 		// 1. Set up objects being tested
 		Menu menu = new Menu();
+		BankRecord bankRecord = new BankRecord();
 		String username = "TestUser";
 		String password = "TestPassword1";
+ 
 		
 		//2. Call method under test
-		menu.signUpCustomer(username, password);
-        BankCustomer newCustomer = new BankCustomer(username);
+		menu.signUpCustomer(username, password, bankRecord);
+        BankCustomer newCustomer = new BankCustomer(username, password, bankRecord);
         
         
         //3. Use assertions to verify results
@@ -30,16 +33,17 @@ public class MenuTests {
 		//1. Set up objects being tested
 		
 		Menu menu = new Menu ();
+		BankRecord bankRecord = new BankRecord();
 		String username1 = "UserName1";
 		String username2 = "UserName2";
 		String password1 = "Password1";
 		String password2 = "Password2";
 		
 		//2. Call method under test
-		menu.signUpCustomer(username1, password1);
-        menu.signUpCustomer(username2, password2);
-        BankCustomer customer1 = new BankCustomer(username1);
-        BankCustomer customer2 = new BankCustomer(username2);
+		menu.signUpCustomer(username1, password1, bankRecord);
+        menu.signUpCustomer(username2, password2, bankRecord);
+        BankCustomer customer1 = new BankCustomer(username1, password1, bankRecord);
+        BankCustomer customer2 = new BankCustomer(username2, password2, bankRecord);
         
         //3. Use assertions to verify results
         assertEquals(username1, customer1.getUsername());

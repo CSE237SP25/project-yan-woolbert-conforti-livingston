@@ -21,7 +21,7 @@ public class BankRecordTests {
 	public void addOneUser() {
 		//1. Create objects to be tested
 		BankRecord record = new BankRecord();
-		BankCustomer customer = new BankCustomer("Test");
+		BankCustomer customer = new BankCustomer("Test", null, record);
 
 		//2. Call methods to be tested
 		record.addUser(123, customer);
@@ -36,8 +36,8 @@ public class BankRecordTests {
 	public void addMultipleUsers() {
 		//1. Create objects to be tested
 		BankRecord record = new BankRecord();
-		BankCustomer customer1 = new BankCustomer("Test1");
-		BankCustomer customer2 = new BankCustomer("Test3");
+		BankCustomer customer1 = new BankCustomer("Test1", null, record);
+		BankCustomer customer2 = new BankCustomer("Test3", null, record);
 		
 		//2. Call methods to be tested
 		record.addUser(123, customer1);
@@ -52,8 +52,8 @@ public class BankRecordTests {
 	public void addUsersWithSameID() {
 		//1. Create objects to be tested
 		BankRecord record = new BankRecord();
-		BankCustomer customer1 = new BankCustomer("Test1");
-		BankCustomer customer2 = new BankCustomer("Test3");
+		BankCustomer customer1 = new BankCustomer("Test1", null, record);
+		BankCustomer customer2 = new BankCustomer("Test3", null, record);
 		
 		//2. Call methods to be tested
 		//3. Use assertions to verify results
@@ -143,7 +143,7 @@ public class BankRecordTests {
 	@Test
     void testDeleteAccount() {
 		BankRecord bankRecord = new BankRecord();
-        BankCustomer customer = new BankCustomer("Alice");
+        BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         bankRecord.addUser(customer.getUserID(), customer);
         int userID = customer.getUserID();
         int accountID = customer.addNewAccount(bankRecord);
@@ -163,7 +163,7 @@ public class BankRecordTests {
     @Test
     void testDeleteNonExistentAccount() {
     	BankRecord bankRecord = new BankRecord();
-        BankCustomer customer = new BankCustomer("Alice");
+        BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         bankRecord.addUser(customer.getUserID(), customer);
         int userID = customer.getUserID();
 
@@ -177,9 +177,9 @@ public class BankRecordTests {
     @Test
     void testDeleteAccountNotOwnedByUser() {
     	BankRecord bankRecord = new BankRecord();
-        BankCustomer customer = new BankCustomer("Alice");
+        BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         bankRecord.addUser(customer.getUserID(), customer);
-        BankCustomer anotherCustomer = new BankCustomer("Bob");
+        BankCustomer anotherCustomer = new BankCustomer("Bob", null, bankRecord);
         bankRecord.addUser(anotherCustomer.getUserID(), anotherCustomer);
         int userID = customer.getUserID();
         int accountID = customer.addNewAccount(bankRecord);
