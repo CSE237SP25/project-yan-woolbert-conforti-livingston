@@ -8,14 +8,17 @@ public class BankCustomer {
 	
 	// Other private variable declarations
 	private String username;
+	private String password;
 	// UserID will be unique across BankCustomers
 	private int userID;
 	
 	// Default constructor for BankCustomer
-	public BankCustomer(String username) {
+	public BankCustomer(String username, String password, BankRecord bankRecord) {
 		this.username = username;
+		this.password = password;
 		this.userID = numberOfBankCustomers;
 		numberOfBankCustomers++;
+		bankRecord.addUser(userID, this);
 	}
 	
 	// Getter and setter methods for BankCustomer
