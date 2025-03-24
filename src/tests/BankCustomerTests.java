@@ -1,7 +1,9 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -34,8 +36,8 @@ public class BankCustomerTests {
 		//2. Use assertions to verify results both username and user ID
 		assertEquals(customer0.getUsername(), "Test Customer 0");
 		assertEquals(customer1.getUsername(), "Test Customer 1");
-		assertEquals(customer0.getUserID(), 3);
-		assertEquals(customer1.getUserID(), 4);
+		assertEquals(customer0.getUserID(), 4);
+		assertEquals(customer1.getUserID(), 5);
 	}
 	
 	@Test
@@ -62,4 +64,21 @@ public class BankCustomerTests {
         assertTrue(userAccounts.contains(accountID));
         assertNotNull(bankRecord.getAccountIDAccounts().get(accountID));
 	}
+	@Test
+    void testRemoveAccountThroughCustomer() {
+		BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("Alice");
+        bankRecord.addUser(customer.getUserID(), customer);
+        int accountID = customer.addNewAccount(bankRecord);
+
+        // Ensure account exists
+        assertTrue(customer.getUserAccounts(bankRecord).contains(accountID));
+
+        // Remove account
+        customer.removeAccount(bankRecord, accountID);
+
+        // Verify account is removed
+        assertFalse(customer.getUserAccounts(bankRecord).contains(accountID));
+        assertNull(bankRecord.getAccountIDAccounts().get(accountID));
+    }
 }

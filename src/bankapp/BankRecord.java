@@ -57,9 +57,26 @@ public class BankRecord {
 		userIDAccountIDs.get(userID).add(accountID);
 		accountIDAccounts.put(accountID, account);
 		}
+		
 	}
 
-	
+	public void deleteAccount(int userID, int accountID) {
+	    if (!userIDCustomer.containsKey(userID)) {
+	        throw new IllegalArgumentException("User does not exist");
+	    }
+	    if (!accountIDAccounts.containsKey(accountID)) {
+	        throw new IllegalArgumentException("Account ID does not exist");
+	    }
+	    if (!userIDAccountIDs.get(userID).contains(accountID)) {
+	        throw new IllegalArgumentException("This account does not belong to the user");
+	    }
+
+	    // Remove the account from the user's list
+	    userIDAccountIDs.get(userID).remove(Integer.valueOf(accountID));
+
+	    // Remove the account from BankRecord
+	    accountIDAccounts.remove(accountID);
+	}
 	
 	
 
