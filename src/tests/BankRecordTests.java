@@ -22,50 +22,23 @@ public class BankRecordTests {
 		//1. Create objects to be tested
 		BankRecord record = new BankRecord();
 		BankCustomer customer = new BankCustomer("Test", null, record);
-
-		//2. Call methods to be tested
-		record.addUser(123, customer);
 		
 		//3. Use assertions to verify results
 		
-		assertEquals(record.getUserIDCustomer().get(123), customer);
+		assertEquals(customer, record.getUserIDCustomer().get(customer.getUserID()));
 	}
 	
 	
 	@Test
 	public void addMultipleUsers() {
-		//1. Create objects to be tested
 		BankRecord record = new BankRecord();
 		BankCustomer customer1 = new BankCustomer("Test1", null, record);
-		BankCustomer customer2 = new BankCustomer("Test3", null, record);
-		
-		//2. Call methods to be tested
-		record.addUser(123, customer1);
-		record.addUser(456, customer2);
-
-		//3. Use assertions to verify results
-		assertEquals(record.getUserIDCustomer().get(123), customer1);
-		assertEquals(record.getUserIDCustomer().get(456), customer2);
+		BankCustomer customer2 = new BankCustomer("Test2", null, record);
+	
+		assertEquals(customer1, record.getUserIDCustomer().get(customer1.getUserID()));
+		assertEquals(customer2, record.getUserIDCustomer().get(customer2.getUserID()));
 	}
 	
-	@Test
-	public void addUsersWithSameID() {
-		//1. Create objects to be tested
-		BankRecord record = new BankRecord();
-		BankCustomer customer1 = new BankCustomer("Test1", null, record);
-		BankCustomer customer2 = new BankCustomer("Test3", null, record);
-		
-		//2. Call methods to be tested
-		//3. Use assertions to verify results
-		try {
-			record.addUser(123, customer1);
-			record.addUser(123, customer2);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
-		assertEquals(record.getUserIDCustomer().get(123), customer1);
-	}
 	
 	@Test
 	public void addOneAccount() {
@@ -144,7 +117,6 @@ public class BankRecordTests {
     void testDeleteAccount() {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
-        bankRecord.addUser(customer.getUserID(), customer);
         int userID = customer.getUserID();
         int accountID = customer.addNewAccount(bankRecord);
         BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
@@ -164,7 +136,6 @@ public class BankRecordTests {
     void testDeleteNonExistentAccount() {
     	BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
-        bankRecord.addUser(customer.getUserID(), customer);
         int userID = customer.getUserID();
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -178,9 +149,7 @@ public class BankRecordTests {
     void testDeleteAccountNotOwnedByUser() {
     	BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
-        bankRecord.addUser(customer.getUserID(), customer);
         BankCustomer anotherCustomer = new BankCustomer("Bob", null, bankRecord);
-        bankRecord.addUser(anotherCustomer.getUserID(), anotherCustomer);
         int userID = customer.getUserID();
         int accountID = customer.addNewAccount(bankRecord);
         BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
@@ -191,6 +160,18 @@ public class BankRecordTests {
         });
 
         assertEquals("This account does not belong to the user", exception.getMessage());
+    }
+    
+    @Test
+    void testDuplicateUsernameNotAllowed() {
+        BankRecord bankRecord = new BankRecord();
+        new BankCustomer("user1", "pass", bankRecord);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            new BankCustomer("user1", "otherPass", bankRecord);
+        });
+
+        assertEquals("Username already taken", exception.getMessage());
     }
 	
 }

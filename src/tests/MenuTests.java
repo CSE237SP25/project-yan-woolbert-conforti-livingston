@@ -20,7 +20,6 @@ public class MenuTests {
  
 		
 		//2. Call method under test
-		menu.signUpCustomer(username, password, bankRecord);
         BankCustomer newCustomer = new BankCustomer(username, password, bankRecord);
         
         
@@ -40,8 +39,6 @@ public class MenuTests {
 		String password2 = "Password2";
 		
 		//2. Call method under test
-		menu.signUpCustomer(username1, password1, bankRecord);
-        menu.signUpCustomer(username2, password2, bankRecord);
         BankCustomer customer1 = new BankCustomer(username1, password1, bankRecord);
         BankCustomer customer2 = new BankCustomer(username2, password2, bankRecord);
         
