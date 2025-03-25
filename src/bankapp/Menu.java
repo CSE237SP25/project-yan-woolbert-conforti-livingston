@@ -36,6 +36,7 @@ public class Menu {
     }
 
     private void signUp(Scanner scanner) {
+        try{
         System.out.print("Enter your new username: ");
         String newUsername = scanner.nextLine();
         System.out.print("Enter your new password: ");
@@ -43,6 +44,9 @@ public class Menu {
 
         signUpCustomer(newUsername, newPassword, bankRecord);
         System.out.println("Sign up successful. You can now log in.");
+        } catch (IllegalArgumentException e){
+            System.out.println("This username is already taken. Please choose a different username.");
+        }
     }
 
     private void login(Scanner scanner) {
@@ -52,6 +56,10 @@ public class Menu {
         String password = scanner.nextLine();
 
         BankCustomer customer = bankRecord.getCustomerByUsername(username);
+        if (customer == null) {
+            System.out.println("Invalid username or password.");
+            return;
+        }
         if (customer.isPasswordCorrect(password)) {
             System.out.println("Login successful! Welcome, " + customer.getUsername());
             customerMenu(scanner, customer);
@@ -79,26 +87,52 @@ public class Menu {
                     System.out.println("New account created with ID: " + accountID);
                     break;
                 case "2":
-                    System.out.print("Enter account ID to close: ");
-                    int closeID = Integer.parseInt(scanner.nextLine());
-                    customer.removeAccount(bankRecord, closeID);
-                    System.out.println("Account " + closeID + " closed.");
+                    try{
+                        System.out.print("Enter account ID to close: ");
+                        int closeID = Integer.parseInt(scanner.nextLine());
+                        customer.removeAccount(bankRecord, closeID);
+                        System.out.println("Account " + closeID + " closed.");
+                    }catch(IllegalArgumentException e) {
+                        System.out.println("Error: Account does not exist.");
+                    }
                     break;
                 case "3":
-                    System.out.print("Enter account ID to deposit into: ");
-                    int depID = Integer.parseInt(scanner.nextLine());
-                    System.out.print("Enter amount to deposit: ");
-                    double depositAmt = Double.parseDouble(scanner.nextLine());
-                    bankRecord.getAccountIDAccounts().get(depID).deposit(depositAmt);
-                    System.out.println("Deposited $" + depositAmt + " to account " + depID);
+                    try{
+                        System.out.print("Enter account ID to deposit into: ");
+                        int depID = Integer.parseInt(scanner.nextLine());
+                        System.out.print("Enter amount to deposit: ");
+                        double depositAmt = Double.parseDouble(scanner.nextLine());
+                        BankAccount account = bankRecord.getAccountIDAccounts().get(depID);
+                        if (account == null) {
+                            System.out.println("Error: Account not found.");
+                            break;
+                        }
+                        account.deposit(depositAmt);
+                        System.out.println("Deposited $" + depositAmt + " to account " + depID);
+                    }catch (IllegalArgumentException e) {
+                        System.out.println("Error: Please enter a valid amount. Amount must be positive.");
+                    } catch (Exception e) {
+                        System.out.println("Error: Please enter a valid number.");
+                    }
                     break;
                 case "4":
-                    System.out.print("Enter account ID to withdraw from: ");
-                    int wdID = Integer.parseInt(scanner.nextLine());
-                    System.out.print("Enter amount to withdraw: ");
-                    double withdrawAmt = Double.parseDouble(scanner.nextLine());
-                    bankRecord.getAccountIDAccounts().get(wdID).withdraw(withdrawAmt);
-                    System.out.println("Withdrew $" + withdrawAmt + " from account " + wdID);
+                    try{
+                        System.out.print("Enter account ID to withdraw from: ");
+                        int wdID = Integer.parseInt(scanner.nextLine());
+                        System.out.print("Enter amount to withdraw: ");
+                        double withdrawAmt = Double.parseDouble(scanner.nextLine());
+                        BankAccount account = bankRecord.getAccountIDAccounts().get(wdID);
+                        if (account == null) {
+                            System.out.println("Error: Account not found.");
+                            break;
+                        }
+                        account.withdraw(withdrawAmt);
+                        System.out.println("Withdrew $" + withdrawAmt + " from account " + wdID);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Error: Insufficient funds or invalid amount.");
+                    } catch (Exception e) {
+                        System.out.println("Error: Please enter a valid number.");
+                    }
                     break;
                 case "5":
                     ArrayList<Integer> accounts = customer.getUserAccounts(bankRecord);
