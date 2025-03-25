@@ -4,8 +4,13 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Menu {
-
-    private BankRecord bankRecord = new BankRecord();
+	// Declaration of private instance variables
+    private BankRecord bankRecord;
+    
+    // Default constructor for Menu class
+    public Menu() {
+    	this.bankRecord = new BankRecord();
+    }
 
     public void startMenu() {
         Scanner scanner = new Scanner(System.in);
@@ -76,8 +81,10 @@ public class Menu {
             System.out.println("3. Deposit");
             System.out.println("4. Withdraw");
             System.out.println("5. View Accounts");
-            System.out.println("6. Log Out");
-            System.out.print("Choose an option 1-6: ");
+            System.out.println("6. Transfer Funds");
+            System.out.println("7: Set Minimum Balance");
+            System.out.println("8. Log Out");
+            System.out.print("Choose an option 1-8: ");
             
             String choice = scanner.nextLine();
 
@@ -141,11 +148,48 @@ public class Menu {
                     } else {
                         for (int id : accounts) {
                             BankAccount acc = bankRecord.getAccountIDAccounts().get(id);
-                            System.out.println("Account ID: " + id + " | Balance: $" + acc.getCurrentBalance());
+                            System.out.println("Account ID: " + id + " | Balance: $" + acc.getCurrentBalance() + 
+                            		" / Min: " + acc.getMinimumBalance());
                         }
                     }
                     break;
                 case "6":
+                	try {
+                		System.out.println("Enter account ID to transfer funds from: ");
+                		int fundsFromAccountID = Integer.parseInt(scanner.nextLine());
+                        if (bankRecord.getAccountIDAccounts().get(fundsFromAccountID) == null) {
+                            System.out.println("Error: Account not found.");
+                            break;
+                        }
+                		System.out.println("Enter account ID to transfer funds to: ");
+                		int fundsToAccountID = Integer.parseInt(scanner.nextLine());
+                		if (bankRecord.getAccountIDAccounts().get(fundsToAccountID) == null) {
+                            System.out.println("Error: Account not found.");
+                            break;
+                        }
+                		System.out.print("Enter amount to transfer: ");
+                        double transferAmount = Double.parseDouble(scanner.nextLine());
+                		customer.transferFundsBetweenAccount(fundsFromAccountID, fundsToAccountID, transferAmount);	
+                	} catch (Exception e) {
+                        System.out.println("Error: Please enter a valid account ID and withdrawl amount in range.");
+                    }
+                	break;
+                case "7":
+                	try {
+                		System.out.println("Enter account ID to set minimum balance of: ");
+                		int minimumAccountID = Integer.parseInt(scanner.nextLine());
+                        if (bankRecord.getAccountIDAccounts().get(minimumAccountID) == null) {
+                            System.out.println("Error: Account not found.");
+                            break;
+                        }
+                		System.out.print("Enter desired minimum balance: ");
+                        double minimumBalance = Double.parseDouble(scanner.nextLine());
+                        bankRecord.getAccountIDAccounts().get(minimumAccountID).setMinimumBalance(minimumBalance);
+                	} catch (Exception e) {
+                        System.out.println("Error: Please enter a valid account ID and minimum amount > 0.");
+                    }
+                	break;
+                case "8":
                     System.out.println("Logging out...");
                     return;
                 default:
