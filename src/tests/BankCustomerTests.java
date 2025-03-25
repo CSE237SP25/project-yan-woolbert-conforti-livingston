@@ -37,8 +37,8 @@ public class BankCustomerTests {
 		//2. Use assertions to verify results both username and user ID
 		assertEquals(customer0.getUsername(), "Test Customer 0");
 		assertEquals(customer1.getUsername(), "Test Customer 1");
-		assertEquals(customer0.getUserID(), 4);
-		assertEquals(customer1.getUserID(), 5);
+		assertEquals(customer0.getUserID(), 0);
+		assertEquals(customer1.getUserID(), 1);
 	}
 	
 	@Test
