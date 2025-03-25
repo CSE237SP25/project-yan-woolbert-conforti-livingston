@@ -14,7 +14,7 @@ public class Menu {
             System.out.println("\n1. Sign Up");
             System.out.println("2. Log In");
             System.out.println("3. Exit");
-            System.out.print("Choose an option: ");
+            System.out.print("Choose an option 1-3: ");
             
             String choice = scanner.nextLine();
 
@@ -69,7 +69,7 @@ public class Menu {
             System.out.println("4. Withdraw");
             System.out.println("5. View Accounts");
             System.out.println("6. Log Out");
-            System.out.print("Choose an option: ");
+            System.out.print("Choose an option 1-6: ");
             
             String choice = scanner.nextLine();
 
