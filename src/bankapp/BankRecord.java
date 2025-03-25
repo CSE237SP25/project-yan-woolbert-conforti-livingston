@@ -2,7 +2,9 @@ package bankapp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class BankRecord {
 
@@ -10,12 +12,16 @@ public class BankRecord {
 	private Map<Integer, ArrayList<Integer>> userIDAccountIDs;
 	private Map<Integer, BankCustomer> userIDCustomer;
 	private Map<Integer, BankAccount> accountIDAccounts;
+	private Set<String> registeredUsernames;
+
 	
 	// Default constructor for BankRecord
 	public BankRecord() {
 		this.userIDAccountIDs = new HashMap<>();
 		this.userIDCustomer = new HashMap<>();
 		this.accountIDAccounts = new HashMap<>();
+		this.registeredUsernames = new HashSet<>();
+		
 	}
 	
 	//Getters for all hashMaps
@@ -36,9 +42,13 @@ public class BankRecord {
 		if(getUserIDAccountIDs().containsKey(userID)) {
 			throw new IllegalArgumentException();
 		}
+		if (registeredUsernames.contains(customer.getUsername())) {
+	        throw new IllegalArgumentException("Username already taken");
+	    }
 		else {
 		userIDAccountIDs.put(userID, new ArrayList<Integer>());
 		userIDCustomer.put(userID, customer);
+    	registeredUsernames.add(customer.getUsername());
 		}
 	}
 
@@ -78,7 +88,14 @@ public class BankRecord {
 	    accountIDAccounts.remove(accountID);
 	}
 	
-	
+	public BankCustomer getCustomerByUsername(String username) {
+	    for (BankCustomer customer : userIDCustomer.values()) {
+	        if (customer.getUsername().equals(username)) {
+	            return customer;
+	        }
+	    }
+	    return null; // Not found
+	}
 
 	
 }

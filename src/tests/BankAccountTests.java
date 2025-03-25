@@ -85,8 +85,7 @@ public class BankAccountTests {
 	@Test
 	public void testUniqueAccountID() {
 		BankRecord bankRecord = new BankRecord();
-        BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
-        bankRecord.addUser(customer.getUserID(), customer);
+        BankCustomer customer = new BankCustomer("Alex", null, bankRecord);
         int userID = customer.getUserID();
 
         // Create multiple accounts

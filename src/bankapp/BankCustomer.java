@@ -29,7 +29,14 @@ public class BankCustomer {
 	public void setUsername(String u) {
 		this.username = u;
 	}
-	
+	public boolean isPasswordCorrect(String enteredPassword) {
+		if (this.password.equals(enteredPassword)) {
+            return true;
+        }
+		else {
+			return false;
+		}
+	}
 	public int getUserID() {
 		return this.userID;
 	}

@@ -18,8 +18,9 @@ public class BankCustomerTests {
 
 	@Test
 	public void testSimpleNewCustomer() {
+		BankRecord bankRecord = new BankRecord();
 		//1. Create objects to be tested
-		BankCustomer customer = new BankCustomer("Test Customer", null, null);
+		BankCustomer customer = new BankCustomer("Test Customer", null, bankRecord);
 		
 		//2. Use assertions to verify results both username and user ID
 		assertEquals(customer.getUsername(), "Test Customer");
@@ -28,10 +29,10 @@ public class BankCustomerTests {
 	
 	@Test
 	public void testMultipleNewCustomers() {
-		
+		BankRecord bankRecord = new BankRecord();
 		//1. Create objects to be tested
-		BankCustomer customer0 = new BankCustomer("Test Customer 0", null, null);
-		BankCustomer customer1 = new BankCustomer("Test Customer 1", null, null);
+		BankCustomer customer0 = new BankCustomer("Test Customer 0", null, bankRecord);
+		BankCustomer customer1 = new BankCustomer("Test Customer 1", null, bankRecord);
 
 		//2. Use assertions to verify results both username and user ID
 		assertEquals(customer0.getUsername(), "Test Customer 0");
@@ -42,8 +43,9 @@ public class BankCustomerTests {
 	
 	@Test
 	public void testSetUsername() {
+		BankRecord bankRecord = new BankRecord();
 		//1. Create objects to be tested
-		BankCustomer customer = new BankCustomer("Test Customer", null, null);
+		BankCustomer customer = new BankCustomer("Test Customer", null, bankRecord);
 		
 		//2. Call methods to be tested
 		customer.setUsername("New Username");
@@ -56,7 +58,6 @@ public class BankCustomerTests {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer2 = new BankCustomer("Alice", null, bankRecord);
         int userID = customer2.getUserID();
-        bankRecord.addUser(userID, customer2);
         int accountID = customer2.addNewAccount(bankRecord);
         List<Integer> userAccounts = customer2.getUserAccounts(bankRecord);
 
@@ -67,7 +68,6 @@ public class BankCustomerTests {
     void testRemoveAccountThroughCustomer() {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
-        bankRecord.addUser(customer.getUserID(), customer);
         int accountID = customer.addNewAccount(bankRecord);
 
         // Ensure account exists
