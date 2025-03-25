@@ -33,3 +33,6 @@ Is there anything that you implemented but doesn't currently work?
 * No. Everything we currently implemented if fully tested and functional.
 
 What commands are needed to compile and run your code from the command line (please provide a script that users can run to launch your program)?
+* Make sure you cd into the project directory
+* Give permissions: chmod +x runBankApp.sh
+* Run the program: ./runBankApp.sh
