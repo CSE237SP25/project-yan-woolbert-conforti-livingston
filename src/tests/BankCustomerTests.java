@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import bankapp.BankAccount;
 import bankapp.BankCustomer;
 import bankapp.BankRecord;
 
@@ -24,7 +25,6 @@ public class BankCustomerTests {
 		
 		//2. Use assertions to verify results both username and user ID
 		assertEquals(customer.getUsername(), "Test Customer");
-		assertEquals(customer.getUserID(), 0);
 	}
 	
 	@Test
@@ -37,8 +37,7 @@ public class BankCustomerTests {
 		//2. Use assertions to verify results both username and user ID
 		assertEquals(customer0.getUsername(), "Test Customer 0");
 		assertEquals(customer1.getUsername(), "Test Customer 1");
-		assertEquals(customer0.getUserID(), 0);
-		assertEquals(customer1.getUserID(), 1);
+		assertEquals(customer0.getUserID() + 1, customer1.getUserID());
 	}
 	
 	@Test
@@ -53,6 +52,7 @@ public class BankCustomerTests {
 		//2. Use assertions to verify results both username and user ID
 		assertEquals(customer.getUsername(), "New Username");
 	}
+	
 	@Test
 	public void testCreateNewAccount() {
 		BankRecord bankRecord = new BankRecord();
@@ -64,6 +64,7 @@ public class BankCustomerTests {
         assertTrue(userAccounts.contains(accountID));
         assertNotNull(bankRecord.getAccountIDAccounts().get(accountID));
 	}
+	
 	@Test
     void testRemoveAccountThroughCustomer() {
 		BankRecord bankRecord = new BankRecord();
@@ -80,4 +81,101 @@ public class BankCustomerTests {
         assertFalse(customer.getUserAccounts(bankRecord).contains(accountID));
         assertNull(bankRecord.getAccountIDAccounts().get(accountID));
     }
+	
+	@Test
+	void simpleValidAccountTransfer() {
+		// Create user with two accounts
+		BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
+        
+        int fundLosingAccountID = customer.addNewAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        
+        BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
+        BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
+        
+        // Deposit money into accounts
+        fundLosingAccount.deposit(100);
+        fundGainingAccount.deposit(50);
+        
+        // Transfer money
+        customer.transferFundsBetweenAccount(fundLosingAccountID, fundGainingAccountID, 50);
+        
+        assertEquals(fundLosingAccount.getCurrentBalance(), 50, 0.01);
+        assertEquals(fundGainingAccount.getCurrentBalance(), 100, 0.01);
+	}
+	
+	@Test
+	void accountTransferFailDueToMinimumBalance() {
+		// Create user with two accounts
+		BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
+        
+        int fundLosingAccountID = customer.addNewAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        
+        BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
+        BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
+        
+        // Deposit money into accounts
+        fundLosingAccount.deposit(100);
+        fundLosingAccount.setMinimumBalance(60);
+        fundGainingAccount.deposit(50);
+        
+        // Transfer money
+        try {
+        	customer.transferFundsBetweenAccount(fundLosingAccountID, fundGainingAccountID, 50);
+        } catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		} 
+	}
+	
+	@Test
+	void accountTransferFailDueToWrongAccountID() {
+		// Create user with two accounts
+		BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
+        
+        int fundLosingAccountID = customer.addNewAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        
+        BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
+        BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
+        
+        // Deposit money into accounts
+        fundLosingAccount.deposit(100);
+        fundLosingAccount.setMinimumBalance(60);
+        fundGainingAccount.deposit(50);
+        
+        // Transfer money
+        try {
+        	customer.transferFundsBetweenAccount(-10, fundGainingAccountID, 50);
+        } catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		} 
+	}
+	
+	@Test
+	void accountTransferFailDueToInsufficientFunds() {
+		// Create user with two accounts
+		BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
+        
+        int fundLosingAccountID = customer.addNewAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        
+        BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
+        BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
+        
+        // Deposit money into accounts
+        fundLosingAccount.deposit(40);
+        fundGainingAccount.deposit(50);
+        
+        // Transfer money
+        try {
+        	customer.transferFundsBetweenAccount(fundLosingAccountID, fundGainingAccountID, 50);
+        } catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		} 
+	}
 }

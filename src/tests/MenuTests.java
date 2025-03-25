@@ -46,6 +46,4 @@ public class MenuTests {
         assertEquals(username1, customer1.getUsername());
         assertEquals(username2, customer2.getUsername());
 	}
-	
-
 }

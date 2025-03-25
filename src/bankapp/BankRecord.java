@@ -96,6 +96,4 @@ public class BankRecord {
 	    }
 	    return null; // Not found
 	}
-
-	
 }

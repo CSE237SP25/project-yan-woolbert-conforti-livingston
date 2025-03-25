@@ -92,7 +92,6 @@ public class BankRecordTests {
 		assertEquals(record.getAccountIDAccounts().get(1), account1);
 	}
 
-
 	@Test
 	public void addMultipleAccountsWithSameID() {
 		// 1. Create objects to be tested
@@ -113,6 +112,7 @@ public class BankRecordTests {
 		assertEquals(record.getAccountIDAccounts().get(2), null);
 		assertEquals(record.getAccountIDAccounts().get(1), account1);
 	}
+	
 	@Test
     void testDeleteAccount() {
 		BankRecord bankRecord = new BankRecord();

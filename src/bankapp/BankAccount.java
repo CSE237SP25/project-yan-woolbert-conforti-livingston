@@ -1,16 +1,22 @@
 package bankapp;
 
 public class BankAccount {
-
+	// Declaration of private instance variables
+	private static int numberOfAccounts = 0;
+	private int accountID;
 	private double balance;
 	private double minimumBalance;
 	
+	// Default constructor for BankCustomer
 	public BankAccount() {
+		this.accountID = numberOfAccounts++;
 		this.balance = 0;
 		this.minimumBalance = 0;
 	}
 	
+	// Minimum balance constructor for BankCustomer
 	public BankAccount(double minimumBalance) {
+		this.accountID = numberOfAccounts++;
 		this.balance = 0;
 		this.minimumBalance = minimumBalance;
 	}
@@ -37,6 +43,8 @@ public class BankAccount {
 			throw new IllegalArgumentException();
 		}
 	}
+	
+	// Getter and setter methods for BankAccount
 	public void setMinimumBalance(double minimumBalance) {
 		if(minimumBalance < 0) 
 			throw new IllegalArgumentException();
@@ -49,5 +57,9 @@ public class BankAccount {
 	
 	public double getCurrentBalance() {
 		return this.balance;
+	}
+	
+	public int getAccountID() {
+		return this.accountID;
 	}
 }
