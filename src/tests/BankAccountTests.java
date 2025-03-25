@@ -82,6 +82,8 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}
 	}
+	
+	
 	@Test
 	public void testUniqueAccountID() {
 		BankRecord bankRecord = new BankRecord();
@@ -109,4 +111,60 @@ public class BankAccountTests {
         assertTrue(userAccounts.contains(accountID2));
         assertTrue(userAccounts.contains(accountID3));
 	}
+	
+	@Test
+	public void testSetMinimumBalance() {
+		BankAccount account = new BankAccount(100);
+		
+		account.setMinimumBalance(50);
+		
+		assertEquals(50.0, account.getMinimumBalance(), 0.005);
+	}
+	
+	@Test
+	public void testNegativeMinimumBalance() {
+		BankAccount account = new BankAccount(100);
+
+		try {
+			account.withdraw(-100);
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		}
+	}
+	
+	@Test 
+	public void testWithdrawBelowMinimumBalance(){
+		BankAccount account = new BankAccount(50);
+		account.deposit(100);
+		
+		try {
+			account.withdraw(60);
+			fail();
+		}
+		catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		}
+	}
+	
+	@Test 
+	public void testWithdrawAboveMinimumBalance(){
+		BankAccount account = new BankAccount(50);
+		account.deposit(100);
+		
+		account.withdraw(40);
+		
+		assertEquals(60.0, account.getCurrentBalance(), 0.005);
+	}
+	
+	@Test 
+	public void testWithdrawExactAmountToReachMinimumBalance(){
+		BankAccount account = new BankAccount(50);
+		account.deposit(100);
+		
+		account.withdraw(50);
+		
+		assertEquals(50.0, account.getCurrentBalance(), 0.005);
+	}
+	
 }
