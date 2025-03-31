@@ -2,10 +2,10 @@ package bankapp;
 
 public class BankAccount {
 	// Declaration of private instance variables
-	private static int numberOfAccounts = 0;
-	private int accountID;
-	private double balance;
-	private double minimumBalance;
+	protected static int numberOfAccounts = 0;
+	protected int accountID;
+	protected double balance;
+	protected double minimumBalance;
 	
 	// Default constructor for BankCustomer
 	public BankAccount() {
