@@ -94,10 +94,10 @@ public class Menu {
                     closeAccount(scanner, customer);
                     break;
                 case "3":
-                    deposit(scanner);
+                    deposit(scanner, customer);
                     break;
                 case "4":
-                    withdraw(scanner);
+                    withdraw(scanner, customer);
                     break;
                 case "5":
                     viewAccounts(customer);
@@ -134,17 +134,18 @@ public class Menu {
         }
     }
 
-    private void deposit(Scanner scanner) {
+    private void deposit(Scanner scanner, BankCustomer customer) {
         try{
             System.out.print("Enter account ID to deposit into: ");
             int depID = Integer.parseInt(scanner.nextLine());
-            System.out.print("Enter amount to deposit: ");
-            double depositAmt = Double.parseDouble(scanner.nextLine());
             BankAccount account = bankRecord.getAccountIDAccounts().get(depID);
-            if (account == null) {
-                System.out.println("Error: Account not found.");
+            if (account == null || !customer.getUserAccounts(bankRecord).contains(depID)) {
+                System.out.println("Error: Account not found or not owned by you.");
                 return;
             }
+    
+            System.out.print("Enter amount to deposit: ");
+            double depositAmt = Double.parseDouble(scanner.nextLine());
             account.deposit(depositAmt);
             System.out.println("Deposited $" + depositAmt + " to account " + depID);
         }catch (IllegalArgumentException e) {
@@ -154,17 +155,18 @@ public class Menu {
         }
     }
 
-    private void withdraw(Scanner scanner) {
+    private void withdraw(Scanner scanner, BankCustomer customer) {
         try{
             System.out.print("Enter account ID to withdraw from: ");
             int wdID = Integer.parseInt(scanner.nextLine());
-            System.out.print("Enter amount to withdraw: ");
-            double withdrawAmt = Double.parseDouble(scanner.nextLine());
             BankAccount account = bankRecord.getAccountIDAccounts().get(wdID);
-            if (account == null) {
-                System.out.println("Error: Account not found.");
+            if (account == null || !customer.getUserAccounts(bankRecord).contains(wdID)) {
+                System.out.println("Error: Account not found or not owned by you.");
                 return;
             }
+    
+            System.out.print("Enter amount to withdraw: ");
+            double withdrawAmt = Double.parseDouble(scanner.nextLine());
             account.withdraw(withdrawAmt);
             System.out.println("Withdrew $" + withdrawAmt + " from account " + wdID);
         } catch (IllegalArgumentException e) {
