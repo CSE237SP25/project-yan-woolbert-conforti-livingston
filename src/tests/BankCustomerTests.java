@@ -58,7 +58,7 @@ public class BankCustomerTests {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer2 = new BankCustomer("Alice", null, bankRecord);
         int userID = customer2.getUserID();
-        int accountID = customer2.addNewAccount(bankRecord);
+        int accountID = customer2.addNewCheckingAccount(bankRecord);
         List<Integer> userAccounts = customer2.getUserAccounts(bankRecord);
 
         assertTrue(userAccounts.contains(accountID));
@@ -69,7 +69,7 @@ public class BankCustomerTests {
     void testRemoveAccountThroughCustomer() {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
-        int accountID = customer.addNewAccount(bankRecord);
+        int accountID = customer.addNewCheckingAccount(bankRecord);
 
         // Ensure account exists
         assertTrue(customer.getUserAccounts(bankRecord).contains(accountID));
@@ -88,8 +88,8 @@ public class BankCustomerTests {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         
-        int fundLosingAccountID = customer.addNewAccount(bankRecord);
-        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        int fundLosingAccountID = customer.addNewCheckingAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewCheckingAccount(bankRecord);
         
         BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
         BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
@@ -111,8 +111,8 @@ public class BankCustomerTests {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         
-        int fundLosingAccountID = customer.addNewAccount(bankRecord);
-        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        int fundLosingAccountID = customer.addNewCheckingAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewCheckingAccount(bankRecord);
         
         BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
         BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
@@ -136,8 +136,8 @@ public class BankCustomerTests {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         
-        int fundLosingAccountID = customer.addNewAccount(bankRecord);
-        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        int fundLosingAccountID = customer.addNewCheckingAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewCheckingAccount(bankRecord);
         
         BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
         BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
@@ -161,8 +161,8 @@ public class BankCustomerTests {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         
-        int fundLosingAccountID = customer.addNewAccount(bankRecord);
-        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        int fundLosingAccountID = customer.addNewCheckingAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewCheckingAccount(bankRecord);
         
         BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
         BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);

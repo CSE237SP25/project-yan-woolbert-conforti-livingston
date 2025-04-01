@@ -88,8 +88,15 @@ public class Menu {
 
             switch (choice) {
                 case "1":
-                    openAccount(customer);
-                    break;
+                	System.out.println("Would you like to open a checking account or savings account? Enter checking or savings:");
+                	String accountType = scanner.nextLine();
+                	if (accountType.equals("checking")|| accountType.equals("savings")) {
+                    	openAccount(customer, accountType);
+                	}
+                	else {
+                		System.out.println("Invalid choice. Returning to Menu.");
+                	}
+                	break;	
                 case "2":
                     closeAccount(scanner, customer);
                     break;
@@ -117,9 +124,15 @@ public class Menu {
         }
     }
 
-    private void openAccount(BankCustomer customer){
-        int accountID = customer.addNewAccount(bankRecord);
-        System.out.println("New account created with ID: " + accountID);
+    private void openAccount(BankCustomer customer, String accountType){
+    	int accountID;
+    	if (accountType.equals("checking")) {
+    		accountID = customer.addNewCheckingAccount(bankRecord);
+    	}
+    	else {
+    		accountID = customer.addNewCheckingAccount(bankRecord);
+    	}
+        System.out.println("New " + accountType + " account created with ID: " + accountID);
         return;
     }
 

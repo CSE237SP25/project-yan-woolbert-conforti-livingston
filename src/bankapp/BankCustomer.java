@@ -1,5 +1,6 @@
 package bankapp;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class BankCustomer {
@@ -32,8 +33,14 @@ public class BankCustomer {
 		}
 	}
 	
-	public int addNewAccount(BankRecord bankRecord) {
+	public int addNewCheckingAccount(BankRecord bankRecord) {
         BankAccount newAccount = new BankAccount();
+        bankRecord.addAccount(this.userID, newAccount.getAccountID(), newAccount);
+        return newAccount.getAccountID();
+	}
+	
+	public int addNewSavingsAccount(BankRecord bankRecord) {
+        SavingsAccount newAccount = new SavingsAccount(0.0000027, LocalTime.of(9, 0));
         bankRecord.addAccount(this.userID, newAccount.getAccountID(), newAccount);
         return newAccount.getAccountID();
 	}
