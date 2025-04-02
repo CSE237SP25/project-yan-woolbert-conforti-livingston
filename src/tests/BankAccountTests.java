@@ -91,9 +91,9 @@ public class BankAccountTests {
         int userID = customer.getUserID();
 
         // Create multiple accounts
-        int accountID1 = customer.addNewAccount(bankRecord);
-        int accountID2 = customer.addNewAccount(bankRecord);
-        int accountID3 = customer.addNewAccount(bankRecord);
+        int accountID1 = customer.addNewCheckingAccount(bankRecord);
+        int accountID2 = customer.addNewCheckingAccount(bankRecord);
+        int accountID3 = customer.addNewCheckingAccount(bankRecord);
 
         // Collect account IDs in a Set (ensures uniqueness)
         Set<Integer> accountIDs = new HashSet<>();

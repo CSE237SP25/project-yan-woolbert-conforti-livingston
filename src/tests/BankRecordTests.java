@@ -118,7 +118,7 @@ public class BankRecordTests {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         int userID = customer.getUserID();
-        int accountID = customer.addNewAccount(bankRecord);
+        int accountID = customer.addNewCheckingAccount(bankRecord);
         BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
 
         // Verify account exists before deletion
@@ -151,7 +151,7 @@ public class BankRecordTests {
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         BankCustomer anotherCustomer = new BankCustomer("Bob", null, bankRecord);
         int userID = customer.getUserID();
-        int accountID = customer.addNewAccount(bankRecord);
+        int accountID = customer.addNewCheckingAccount(bankRecord);
         BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
 
         // Try deleting Alice's account as Bob
