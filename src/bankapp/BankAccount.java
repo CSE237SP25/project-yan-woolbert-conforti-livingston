@@ -46,7 +46,7 @@ public class BankAccount {
 	
 	// Getter and setter methods for BankAccount
 	public void setMinimumBalance(double minimumBalance) {
-		if(minimumBalance < 0) 
+		if(minimumBalance < 0 | minimumBalance > this.balance) 
 			throw new IllegalArgumentException();
 		this.minimumBalance = minimumBalance;
 	}
