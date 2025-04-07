@@ -126,16 +126,14 @@ public class BankAccountTests {
 	
 	@Test 
 	public void testWithdrawBelowMinimumBalance(){
+		//aka testing charging overdraft fee
 		BankAccount account = new BankAccount(50);
 		account.deposit(100);
 		
-		try {
-			account.withdraw(60);
-			fail();
-		}
-		catch (IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
+		account.withdraw(60);
+		
+		//100 - 60 - 25 (overdraft fee) = 15
+		assertEquals(15.0, account.getCurrentBalance(), 0.005);
 	}
 	
 	@Test 

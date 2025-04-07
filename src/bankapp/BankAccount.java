@@ -33,7 +33,8 @@ public class BankAccount {
             throw new IllegalArgumentException("Invalid amount: must be non-negative.");
         }
         if(this.balance - amount < minimumBalance) {
-            throw new IllegalArgumentException("Insufficient funds.");
+            double overdraftFee = 25.0;
+            this.balance -= (amount + overdraftFee);
         }
         
         if(this.balance >= amount) {
