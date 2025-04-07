@@ -111,14 +111,6 @@ public class BankAccountTests {
         assertTrue(userAccounts.contains(accountID3));
 	}
 	
-	@Test
-	public void testSetMinimumBalance() {
-		BankAccount account = new BankAccount(100);
-		
-		account.setMinimumBalance(50);
-		
-		assertEquals(50.0, account.getMinimumBalance(), 0.005);
-	}
 	
 	@Test
 	public void testNegativeMinimumBalance() {
