@@ -80,15 +80,16 @@ public class Menu {
             System.out.println("5. View Accounts");
             System.out.println("6. Transfer Funds");
             System.out.println("7. Set Minimum Balance");
-            System.out.println("8. Log Out");
-            System.out.print("Choose an option 1-8: ");
+            System.out.println("8. Merge Accounts");
+            System.out.println("9. Log Out");
+            System.out.print("Choose an option 1-9: ");
 
             String choice = scanner.nextLine();
 
             switch (choice) {
                 case "1":
                     openAccount(scanner, customer);
-                	break;	
+                    break;  
                 case "2":
                     closeAccount(scanner, customer);
                     break;
@@ -107,7 +108,10 @@ public class Menu {
                 case "7":
                     setMinimumBalance(scanner);
                     break;
-                case "8":
+                    case "8":
+                    mergeAccounts(scanner, customer);
+                    break;
+                case "9":
                     System.out.println("Logging out...");
                     return;
                 default:
@@ -115,7 +119,18 @@ public class Menu {
             }
         }
     }
-
+    private void mergeAccounts(Scanner scanner, BankCustomer customer) {
+        try {
+            System.out.print("Enter the first account ID: ");
+            int acc1 = Integer.parseInt(scanner.nextLine());
+            System.out.print("Enter the second account ID: ");
+            int acc2 = Integer.parseInt(scanner.nextLine());
+            customer.mergeAccounts(acc1, acc2);
+            System.out.println("Accounts merged successfully(merged account ID: "+ acc1 + ").");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
     private void openAccount(Scanner scanner, BankCustomer customer) {
         
         System.out.println(
@@ -193,7 +208,7 @@ public class Menu {
             account.withdraw(withdrawAmt);
             System.out.println("Withdrew $" + withdrawAmt + " from account " + wdID);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error: Insufficient funds or invalid amount.");
+            System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Error: Please enter a valid number.");
         }
@@ -206,32 +221,45 @@ public class Menu {
         } else {
             for (int id : accounts) {
                 BankAccount acc = bankRecord.getAccountIDAccounts().get(id);
+    
                 if (acc instanceof SavingsAccount) {
                     ((SavingsAccount) acc).updateInterest();
                 }
-                System.out.println("Account ID: " + id + " | Balance: $" + acc.getCurrentBalance() +
-                        " / Min: " + acc.getMinimumBalance());
+    
+                String type;
+                if (acc instanceof HighYieldSavingsAccount) {
+                    type = "High-Yield Savings";
+                } else if (acc instanceof SavingsAccount) {
+                    type = "Savings";
+                } else {
+                    type = "Checking";
+                }
+    
+                System.out.println("Account ID: " + id +
+                                   " | Type: " + type +
+                                   " | Balance: $" + acc.getCurrentBalance() +
+                                   " / Min: $" + acc.getMinimumBalance());
             }
-        }
+        }    
     }
 
     private void transferFunds(Scanner scanner, BankCustomer customer) {
         try {
-                		System.out.println("Enter account ID to transfer funds from: ");
-                		int fundsFromAccountID = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Enter account ID to transfer funds from: ");
+                        int fundsFromAccountID = Integer.parseInt(scanner.nextLine());
                         if (bankRecord.getAccountIDAccounts().get(fundsFromAccountID) == null) {
                 System.out.println("Error: Account not found.");
                 return;
             }
-                		System.out.println("Enter account ID to transfer funds to: ");
-                		int fundsToAccountID = Integer.parseInt(scanner.nextLine());
-                		if (bankRecord.getAccountIDAccounts().get(fundsToAccountID) == null) {
+                        System.out.println("Enter account ID to transfer funds to: ");
+                        int fundsToAccountID = Integer.parseInt(scanner.nextLine());
+                        if (bankRecord.getAccountIDAccounts().get(fundsToAccountID) == null) {
                 System.out.println("Error: Account not found.");
                 return;
             }
             System.out.print("Enter amount to transfer: ");
                         double transferAmount = Double.parseDouble(scanner.nextLine());
-                		customer.transferFundsBetweenAccount(fundsFromAccountID, fundsToAccountID, transferAmount);	
+                        customer.transferFundsBetweenAccount(fundsFromAccountID, fundsToAccountID, transferAmount); 
         } catch (Exception e) {
                         System.out.println("Error: Please enter a valid account ID and withdrawl amount in range.");
         }
@@ -240,8 +268,8 @@ public class Menu {
 
     private void setMinimumBalance(Scanner scanner) {
         try {
-                		System.out.println("Enter account ID to set minimum balance of: ");
-                		int minimumAccountID = Integer.parseInt(scanner.nextLine());
+                        System.out.println("Enter account ID to set minimum balance of: ");
+                        int minimumAccountID = Integer.parseInt(scanner.nextLine());
                         if (bankRecord.getAccountIDAccounts().get(minimumAccountID) == null) {
                 System.out.println("Error: Account not found.");
                 return;
@@ -258,3 +286,4 @@ public class Menu {
         BankCustomer newCustomer = new BankCustomer(username, password, bankRecord);
     }
 }
+
