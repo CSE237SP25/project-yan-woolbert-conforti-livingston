@@ -37,7 +37,6 @@ public class Menu {
             }
         }
     }
-
     private void signUp(Scanner scanner) {
         try{
             System.out.print("Enter your new username: ");
@@ -88,14 +87,7 @@ public class Menu {
 
             switch (choice) {
                 case "1":
-                	System.out.println("Would you like to open a checking account or savings account? Enter checking or savings:");
-                	String accountType = scanner.nextLine();
-                	if (accountType.equals("checking")|| accountType.equals("savings")) {
-                    	openAccount(customer, accountType);
-                	}
-                	else {
-                		System.out.println("Invalid choice. Returning to Menu.");
-                	}
+                    openAccount(scanner, customer);
                 	break;	
                 case "2":
                     closeAccount(scanner, customer);
@@ -124,16 +116,30 @@ public class Menu {
         }
     }
 
-    private void openAccount(BankCustomer customer, String accountType){
-    	int accountID;
-    	if (accountType.equals("checking")) {
-    		accountID = customer.addNewCheckingAccount(bankRecord);
-    	}
-    	else {
-    		accountID = customer.addNewCheckingAccount(bankRecord);
-    	}
-        System.out.println("New " + accountType + " account created with ID: " + accountID);
-        return;
+    private void openAccount(Scanner scanner, BankCustomer customer) {
+        
+        System.out.println(
+                "Would you like to open a checking account(1), savings account(2), or high-yield savings account(3)? Choose 1-3:");
+        String accountType = scanner.nextLine();
+        if (accountType.equals("1") || accountType.equals("2") || accountType.equals("3")) {
+            int accountID;
+            String accountTypeDescription;
+            if (accountType.equals("1")) {
+                accountID = customer.addNewCheckingAccount(bankRecord);
+                accountTypeDescription = "checking";
+            } else if (accountType.equals("2")) {
+                accountID = customer.addNewSavingsAccount(bankRecord);
+                accountTypeDescription = "savings (daily 0.0000027 interest rate)";
+            } else {
+                accountID = customer.addNewHighYieldSavingsAccount(bankRecord);
+                accountTypeDescription = "high-yield savings(daily 0.0000054 interest rate, no withdrawal within 1 day of deposits.)";
+            }
+            System.out.println("New " + accountTypeDescription + " account created with ID: " + accountID);
+            return;
+        } else {
+            System.out.println("Invalid choice. Returning to Menu.");
+        }
+
     }
 
     private void closeAccount(Scanner scanner, BankCustomer customer) {
@@ -156,7 +162,9 @@ public class Menu {
                 System.out.println("Error: Account not found or not owned by you.");
                 return;
             }
-    
+            if (account instanceof SavingsAccount) {
+                ((SavingsAccount) account).updateInterest();
+            }
             System.out.print("Enter amount to deposit: ");
             double depositAmt = Double.parseDouble(scanner.nextLine());
             account.deposit(depositAmt);
@@ -177,7 +185,9 @@ public class Menu {
                 System.out.println("Error: Account not found or not owned by you.");
                 return;
             }
-    
+            if (account instanceof SavingsAccount) {
+                ((SavingsAccount) account).updateInterest();
+            }
             System.out.print("Enter amount to withdraw: ");
             double withdrawAmt = Double.parseDouble(scanner.nextLine());
             account.withdraw(withdrawAmt);
@@ -196,6 +206,9 @@ public class Menu {
         } else {
             for (int id : accounts) {
                 BankAccount acc = bankRecord.getAccountIDAccounts().get(id);
+                if (acc instanceof SavingsAccount) {
+                    ((SavingsAccount) acc).updateInterest();
+                }
                 System.out.println("Account ID: " + id + " | Balance: $" + acc.getCurrentBalance() +
                         " / Min: " + acc.getMinimumBalance());
             }
