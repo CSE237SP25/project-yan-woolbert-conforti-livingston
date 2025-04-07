@@ -74,13 +74,10 @@ public class BankAccountTests {
 		BankAccount account = new BankAccount();
 		
 		account.deposit(25);
-				
-		try {
-			account.withdraw(50);
-			fail();
-		} catch (IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
+		account.withdraw(50);
+		
+		//withdraw amount plus $25 fee
+		assertEquals(-50, account.getCurrentBalance(), 0.005);
 	}
 	
 	
