@@ -57,7 +57,7 @@ public class BankAccount {
     
     public void withdraw(double amount) {
     	if (isFrozen) {
-            throw new IllegalStateException("Account is frozen. No deposits allowed.");
+            throw new IllegalStateException("Account is frozen. No withdraws allowed.");
         }
     	if(amount < 0) {
             throw new IllegalArgumentException("Invalid amount: must be non-negative.");
