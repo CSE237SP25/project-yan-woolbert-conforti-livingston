@@ -8,13 +8,14 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import bankapp.BankRecord;
 import bankapp.SavingsAccount;
 
 public class SavingsAccountTests {
 
 	@Test
 	public void testInterestAccumulationSuccess() {
-		SavingsAccount account = new SavingsAccount(0.01, LocalDate.now().minusDays(1));
+		SavingsAccount account = new SavingsAccount(0.01, LocalDate.now().minusDays(1), new BankRecord());
 		account.deposit(100.0);
 
 		account.updateInterest();
@@ -28,7 +29,7 @@ public class SavingsAccountTests {
 
 	@Test
 	public void testInterestNotAppliedTwiceInSameDay() {
-		SavingsAccount account = new SavingsAccount(0.01, LocalDate.now().minusDays(1));
+		SavingsAccount account = new SavingsAccount(0.01, LocalDate.now().minusDays(1), new BankRecord());
 		account.deposit(100.0);
 
 		account.updateInterest();
@@ -40,7 +41,7 @@ public class SavingsAccountTests {
 
 	@Test
 	public void testNoInterestWithoutDeposit() {
-		SavingsAccount account = new SavingsAccount(0.01, LocalDate.now());
+		SavingsAccount account = new SavingsAccount(0.01, LocalDate.now(), new BankRecord());
 		account.updateInterest();
 		assertEquals(0.0, account.getCurrentBalance(), 0.0001);
 	}

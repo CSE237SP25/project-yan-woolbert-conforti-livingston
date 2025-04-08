@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import bankapp.BankRecord;
 import bankapp.HighYieldSavingsAccount;
 
 public class HighYieldSavingsAccountTests {
@@ -18,7 +19,7 @@ public class HighYieldSavingsAccountTests {
     @Test
     public void testWithdrawalAllowedAfterOneDay() {
         // Create a new account with default settings
-        HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.01, LocalDate.now().minusDays(1));
+        HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.01, LocalDate.now().minusDays(1), new BankRecord());
         
         // Set balance without adding a new deposit date
         account.setBalanceForTesting(100.0);
@@ -33,7 +34,7 @@ public class HighYieldSavingsAccountTests {
 
     @Test
     public void testWithdrawalBlockedWithinOneDay() {
-        HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.01, LocalDate.now().minusDays(1));
+        HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.01, LocalDate.now().minusDays(1), new BankRecord());
         account.deposit(100.0);  // deposit happens today
 
         // Should block withdrawal
@@ -43,7 +44,7 @@ public class HighYieldSavingsAccountTests {
 
     @Test
     public void testInterestAppliesCorrectly() {
-        HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.05, LocalDate.now().minusDays(1));
+        HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.05, LocalDate.now().minusDays(1), new BankRecord());
         account.deposit(100.0); // deposit today
 
         // Interest applies (lastInterestDate was yesterday)
@@ -53,7 +54,7 @@ public class HighYieldSavingsAccountTests {
 
     @Test
     public void testWithdrawalBlockedDueToRecentDepositAmongOlderOnes() {
-        HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.01, LocalDate.now().minusDays(1));
+        HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.01, LocalDate.now().minusDays(1), new BankRecord());
 
         // First deposit was more than a day ago
         account.deposit(100.0);

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class HighYieldSavingsAccount extends SavingsAccount {
     private ArrayList<LocalDate> depositDates;
 
-    public HighYieldSavingsAccount(double interestRate, LocalDate lastInterestDate) {
-        super(interestRate, lastInterestDate);
+    public HighYieldSavingsAccount(double interestRate, LocalDate lastInterestDate, BankRecord bankRecord) {
+        super(interestRate, lastInterestDate, bankRecord);
         this.depositDates = new ArrayList<>();
     }
 

@@ -35,18 +35,18 @@ public class BankCustomer {
     }
     
     public int addNewCheckingAccount(BankRecord bankRecord) {
-        BankAccount newAccount = new BankAccount();
+        BankAccount newAccount = new BankAccount(bankRecord);
         bankRecord.addAccount(this.userID, newAccount.getAccountID(), newAccount);
         return newAccount.getAccountID();
     }
     
     public int addNewSavingsAccount(BankRecord bankRecord) {
-        SavingsAccount newAccount = new SavingsAccount(0.0000027, LocalDate.now());
+        SavingsAccount newAccount = new SavingsAccount(0.0000027, LocalDate.now(), bankRecord);
         bankRecord.addAccount(this.userID, newAccount.getAccountID(), newAccount);
         return newAccount.getAccountID();
     }
     public int addNewHighYieldSavingsAccount(BankRecord bankRecord) {
-        HighYieldSavingsAccount newAccount = new HighYieldSavingsAccount(0.0000054, LocalDate.now());
+        HighYieldSavingsAccount newAccount = new HighYieldSavingsAccount(0.0000054, LocalDate.now(), bankRecord);
         bankRecord.addAccount(this.userID, newAccount.getAccountID(), newAccount);
         return newAccount.getAccountID();
     }
