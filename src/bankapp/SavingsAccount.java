@@ -1,5 +1,6 @@
 package bankapp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class SavingsAccount extends BankAccount {
@@ -8,8 +9,8 @@ public class SavingsAccount extends BankAccount {
 	private LocalDate lastInterestDate;
 
   //Constructor
-	public SavingsAccount(double interestRate, java.time.LocalDate lastInterestDate) { // second constructor needed for testing
-		super();
+	public SavingsAccount(double interestRate, java.time.LocalDate lastInterestDate, BankRecord bankRecord) { // second constructor needed for testing
+		super(bankRecord);
 		SavingsAccount.interestRate = interestRate;
 		this.lastInterestDate = lastInterestDate;
 	}
@@ -21,6 +22,12 @@ public class SavingsAccount extends BankAccount {
 		double interest = interestRate * principal;
 		this.balance += interest;
 		lastInterestDate = today;
+		
+		Integer userID = bankRecord.getAccountIDUserID().get(this.accountID);
+		if (userID != null) {
+			TransactionInfo transaction = new TransactionInfo("Interest Earned", interest, this.accountID);
+        	bankRecord.recordTransaction(userID, transaction);
+		}
 	}
 }
 

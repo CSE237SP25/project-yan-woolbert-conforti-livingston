@@ -19,7 +19,7 @@ public class BankAccountTests {
 	@Test
 	public void testSimpleDeposit() {
 		//1. Create objects to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 		
 		//2. Call the method being tested
 		account.deposit(25);
@@ -31,7 +31,7 @@ public class BankAccountTests {
 	@Test
 	public void testNegativeDeposit() {
 		//1. Create object to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 
 		try {
 			account.deposit(-25);
@@ -44,7 +44,7 @@ public class BankAccountTests {
 	@Test
 	public void testSimpleWithdrawal() {
 		//1. Create objects to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 				
 		//2. Call the method being tested
 		account.deposit(25);
@@ -57,7 +57,7 @@ public class BankAccountTests {
 	@Test
 	public void testNegativeWithdrawal() {
 		//1. Create object to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 
 		try {
 			account.withdraw(-25);
@@ -71,7 +71,7 @@ public class BankAccountTests {
 	@Test
 	public void testOverWithdrawal() {
 		//1. Create objects to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 		
 		account.deposit(25);
 		account.withdraw(50);
@@ -111,7 +111,7 @@ public class BankAccountTests {
 	
 	@Test
 	public void testNegativeMinimumBalance() {
-		BankAccount account = new BankAccount(100);
+		BankAccount account = new BankAccount(100, new BankRecord());
 
 		try {
 			account.withdraw(-100);
@@ -124,7 +124,7 @@ public class BankAccountTests {
 	@Test 
 	public void testWithdrawBelowMinimumBalance(){
 		//aka testing charging overdraft fee
-		BankAccount account = new BankAccount(50);
+		BankAccount account = new BankAccount(50, new BankRecord());
 		account.deposit(100);
 		
 		account.withdraw(60);
@@ -135,7 +135,7 @@ public class BankAccountTests {
 	
 	@Test 
 	public void testWithdrawAboveMinimumBalance(){
-		BankAccount account = new BankAccount(50);
+		BankAccount account = new BankAccount(50, new BankRecord());
 		account.deposit(100);
 		
 		account.withdraw(40);
@@ -145,7 +145,7 @@ public class BankAccountTests {
 	
 	@Test 
 	public void testWithdrawExactAmountToReachMinimumBalance(){
-		BankAccount account = new BankAccount(50);
+		BankAccount account = new BankAccount(50, new BankRecord());
 		account.deposit(100);
 		
 		account.withdraw(50);

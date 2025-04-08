@@ -1,24 +1,29 @@
 package bankapp;
 
+import java.time.LocalDateTime;
+
 public class BankAccount {
     // Declaration of private instance variables
     protected static int numberOfAccounts = 0;
     protected int accountID;
     protected double balance;
     protected double minimumBalance;
+    protected BankRecord bankRecord;
     
     // Default constructor for BankCustomer
-    public BankAccount() {
+    public BankAccount(BankRecord bankRecord) {
         this.accountID = numberOfAccounts++;
         this.balance = 0;
         this.minimumBalance = 0;
+        this.bankRecord = bankRecord;
     }
     
     // Minimum balance constructor for BankCustomer
-    public BankAccount(double minimumBalance) {
+    public BankAccount(double minimumBalance, BankRecord bankRecord) {
         this.accountID = numberOfAccounts++;
         this.balance = 0;
         this.minimumBalance = minimumBalance;
+        this.bankRecord = bankRecord;
     }
     
     public void deposit(double amount) {
@@ -26,6 +31,12 @@ public class BankAccount {
             throw new IllegalArgumentException();
         }
         this.balance += amount;
+        
+        Integer userID = bankRecord.getAccountIDUserID().get(this.accountID);
+        if (userID != null) {
+        	TransactionInfo transaction = new TransactionInfo("Deposit", amount, this.accountID);
+        	bankRecord.recordTransaction(userID, transaction);
+        }
     }
     
     public void withdraw(double amount) {
@@ -35,10 +46,21 @@ public class BankAccount {
         if(this.balance - amount < minimumBalance) {
             double overdraftFee = 25.0;
             this.balance -= (amount + overdraftFee);
+            
+            Integer userID = bankRecord.getAccountIDUserID().get(this.accountID);
+            if (userID != null) {
+            	TransactionInfo transaction = new TransactionInfo("Withdrawal", amount, this.accountID);
+                bankRecord.recordTransaction(userID, transaction);
+            }
         }
-        
-        if(this.balance >= amount) {
-        this.balance -= amount;
+        else if(this.balance >= amount) {
+        	this.balance -= amount;
+        	
+        	Integer userID = bankRecord.getAccountIDUserID().get(this.accountID);
+        	if (userID != null) {
+        		TransactionInfo transaction = new TransactionInfo("Withdrawal", amount, this.accountID);
+            	bankRecord.recordTransaction(userID, transaction);
+        	}
         }
         else {
             throw new IllegalArgumentException("Insufficient funds.");
