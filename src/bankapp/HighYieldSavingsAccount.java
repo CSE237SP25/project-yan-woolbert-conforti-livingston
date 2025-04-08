@@ -27,13 +27,8 @@ public class HighYieldSavingsAccount extends SavingsAccount {
         }
         super.withdraw(amount);
     }
-     // For testing purposes only
+//for test
      public ArrayList<LocalDate> getDepositDates() {
         return depositDates;
-    }
-    
-    // For testing purposes only
-    public void setBalanceForTesting(double amount) {
-        this.balance = amount;
     }
 }
