@@ -79,7 +79,7 @@ public class BankAccountTests {
 		//withdraw amount plus $25 fee
 		assertEquals(-50, account.getCurrentBalance(), 0.005);
 	}
-	
+	@Test
 	public void testFreezePreventsWithdrawal() {
 		BankAccount account = new BankAccount(new BankRecord());
 		account.deposit(50);	
@@ -92,7 +92,7 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}	
 	}
-	
+	@Test
 	public void testFreezePreventsDeposit() {
 		BankAccount account = new BankAccount(new BankRecord());
 		account.freezeAccount();					
