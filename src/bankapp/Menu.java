@@ -82,8 +82,10 @@ public class Menu {
             System.out.println("7. Set Minimum Balance");
             System.out.println("8. Merge Accounts");
             System.out.println("9. View Transaction History");
-            System.out.println("10. Log Out");
-            System.out.print("Choose an option 1-10: ");
+            System.out.println("10. Freeze Account");
+            System.out.println("11. Unfreeze Account");
+            System.out.println("12. Log Out");
+            System.out.print("Choose an option 1-12: ");
 
             String choice = scanner.nextLine();
 
@@ -116,6 +118,12 @@ public class Menu {
                     viewTransactionHistory(scanner, customer);
                     break;
                 case "10":
+                    freezeAccount(scanner, customer);
+                    break;
+                case "11":
+                    unfreezeAccount(scanner, customer);
+                    break;
+                case "12":
                     System.out.println("Logging out...");
                     return;
                 default:
@@ -198,6 +206,39 @@ public class Menu {
             System.out.println("Invalid choice. Returning to Menu.");
         }
 
+    }
+    
+    private void freezeAccount(Scanner scanner, BankCustomer customer) {
+    	try {
+    		System.out.print("Enter the account ID to freeze: ");
+    		int accountId = Integer.parseInt(scanner.nextLine());    		
+    		BankAccount account = bankRecord.getAccountIDAccounts().get(accountId);
+    		if (account == null || !customer.getUserAccounts(bankRecord).contains(accountId)) {
+    			System.out.println("Error: Account not found or not owned by you.");
+    	        return;	
+    		}    		
+    		account.freezeAccount();
+    		System.out.println("Account " + accountId + " has been frozen.");
+    		
+    	}catch (Exception e) {
+    		System.out.println("Error: Invalid input.");
+    	}
+    }
+    
+    private void unfreezeAccount(Scanner scanner, BankCustomer customer) {
+        try {
+            System.out.print("Enter the account ID to unfreeze: ");
+            int accountId = Integer.parseInt(scanner.nextLine());
+            BankAccount account = bankRecord.getAccountIDAccounts().get(accountId);
+            if (account == null || !customer.getUserAccounts(bankRecord).contains(accountId)) {
+                System.out.println("Error: Account not found.");
+                return;
+            }
+            account.unfreezeAccount();
+            System.out.println("Account " + accountId + " has been unfrozen.");
+        } catch (Exception e) {
+            System.out.println("Error: Invalid input.");
+        }
     }
 
     private void closeAccount(Scanner scanner, BankCustomer customer) {
