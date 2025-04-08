@@ -80,6 +80,30 @@ public class BankAccountTests {
 		assertEquals(-50, account.getCurrentBalance(), 0.005);
 	}
 	
+	public void testFreezePreventsWithdrawal() {
+		BankAccount account = new BankAccount(new BankRecord());
+		account.deposit(50);	
+		account.freezeAccount();
+		
+		try {
+			account.withdraw(25);
+			fail();
+		}catch (IllegalStateException e) {
+			assertTrue(e != null);
+		}	
+	}
+	
+	public void testFreezePreventsDeposit() {
+		BankAccount account = new BankAccount(new BankRecord());
+		account.freezeAccount();					
+		try {
+			account.deposit(50);
+			fail();
+		}catch (IllegalStateException e) {
+			assertTrue(e != null);
+		}	
+	}
+	
 	
 	@Test
 	public void testUniqueAccountID() {

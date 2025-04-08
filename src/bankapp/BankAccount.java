@@ -9,6 +9,7 @@ public class BankAccount {
     protected double balance;
     protected double minimumBalance;
     protected BankRecord bankRecord;
+    protected boolean isFrozen = false;
     
     // Default constructor for BankCustomer
     public BankAccount(BankRecord bankRecord) {
@@ -26,8 +27,23 @@ public class BankAccount {
         this.bankRecord = bankRecord;
     }
     
+    public void freezeAccount() {
+    	this.isFrozen = true;
+    }
+    
+    public void unfreezeAccount() {
+    	this.isFrozen = false;
+    }
+    
+    public boolean isFrozen() {
+        return isFrozen;
+    }
+    
     public void deposit(double amount) {
-        if(amount < 0) {
+    	if (isFrozen) {
+            throw new IllegalStateException("Account is frozen. No deposits allowed.");
+        }
+    	if(amount < 0) {
             throw new IllegalArgumentException();
         }
         this.balance += amount;
@@ -40,7 +56,10 @@ public class BankAccount {
     }
     
     public void withdraw(double amount) {
-        if(amount < 0) {
+    	if (isFrozen) {
+            throw new IllegalStateException("Account is frozen. No withdraws allowed.");
+        }
+    	if(amount < 0) {
             throw new IllegalArgumentException("Invalid amount: must be non-negative.");
         }
         if(this.balance - amount < minimumBalance) {
