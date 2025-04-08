@@ -81,8 +81,9 @@ public class Menu {
             System.out.println("6. Transfer Funds");
             System.out.println("7. Set Minimum Balance");
             System.out.println("8. Merge Accounts");
-            System.out.println("9. Log Out");
-            System.out.print("Choose an option 1-9: ");
+            System.out.println("9. View Transaction History");
+            System.out.println("10. Log Out");
+            System.out.print("Choose an option 1-10: ");
 
             String choice = scanner.nextLine();
 
@@ -112,6 +113,9 @@ public class Menu {
                     mergeAccounts(scanner, customer);
                     break;
                 case "9":
+                    viewTransactionHistory(scanner, customer);
+                    break;
+                case "10":
                     System.out.println("Logging out...");
                     return;
                 default:
@@ -119,6 +123,44 @@ public class Menu {
             }
         }
     }
+    
+    private void viewTransactionHistory(Scanner scanner, BankCustomer customer) {
+    	try {
+    		System.out.println("Would you like to view the history of all accounts (1) or view the history of a specific account? Choose 1-2:");
+    		int choice = Integer.parseInt(scanner.nextLine());
+    		if (choice != 1 && choice != 2) {
+    			System.out.println("Invalid choice. Returning to Menu.");
+    		}
+    		else if (choice == 1) {
+    			ArrayList<TransactionInfo> history = bankRecord.getTransactionHistory(customer.getUserID());
+    			if (history != null) {
+	    			for (TransactionInfo transactionInfo : history) {
+	    				System.out.println(transactionInfo.toString());
+	    			}
+    			}
+    		}
+    		else {
+    			System.out.println("Please specify the account who's history you want to view: ");
+    			int accountID = Integer.parseInt(scanner.nextLine());
+                BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
+    			if (account == null || !customer.getUserAccounts(bankRecord).contains(accountID)) {
+    				System.out.println("Error: Account not found or not owned by you.");
+    	            return;
+    	        }
+    			ArrayList<TransactionInfo> history = bankRecord.getTransactionHistory(customer.getUserID());
+    			if (history != null) {
+	    			for (TransactionInfo transactionInfo : history) {
+	    				if (transactionInfo.getAccountID() == accountID) {
+	    					System.out.println(transactionInfo.toString());
+	    				}
+	    			}
+    			}
+    		}
+    	} catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
     private void mergeAccounts(Scanner scanner, BankCustomer customer) {
         try {
             System.out.print("Enter the first account ID: ");
@@ -131,6 +173,7 @@ public class Menu {
             System.out.println("Error: " + e.getMessage());
         }
     }
+    
     private void openAccount(Scanner scanner, BankCustomer customer) {
         
         System.out.println(
