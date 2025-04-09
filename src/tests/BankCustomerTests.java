@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -17,59 +18,59 @@ import bankapp.BankRecord;
 
 public class BankCustomerTests {
 
-	@Test
-	public void testSimpleNewCustomer() {
-		BankRecord bankRecord = new BankRecord();
-		//1. Create objects to be tested
-		BankCustomer customer = new BankCustomer("Test Customer", null, bankRecord);
-		
-		//2. Use assertions to verify results both username and user ID
-		assertEquals(customer.getUsername(), "Test Customer");
-	}
-	
-	@Test
-	public void testMultipleNewCustomers() {
-		BankRecord bankRecord = new BankRecord();
-		//1. Create objects to be tested
-		BankCustomer customer0 = new BankCustomer("Test Customer 0", null, bankRecord);
-		BankCustomer customer1 = new BankCustomer("Test Customer 1", null, bankRecord);
+    @Test
+    public void testSimpleNewCustomer() {
+        BankRecord bankRecord = new BankRecord();
+        //1. Create objects to be tested
+        BankCustomer customer = new BankCustomer("Test Customer", null, bankRecord);
+        
+        //2. Use assertions to verify results both username and user ID
+        assertEquals(customer.getUsername(), "Test Customer");
+    }
+    
+    @Test
+    public void testMultipleNewCustomers() {
+        BankRecord bankRecord = new BankRecord();
+        //1. Create objects to be tested
+        BankCustomer customer0 = new BankCustomer("Test Customer 0", null, bankRecord);
+        BankCustomer customer1 = new BankCustomer("Test Customer 1", null, bankRecord);
 
-		//2. Use assertions to verify results both username and user ID
-		assertEquals(customer0.getUsername(), "Test Customer 0");
-		assertEquals(customer1.getUsername(), "Test Customer 1");
-		assertEquals(customer0.getUserID() + 1, customer1.getUserID());
-	}
-	
-	@Test
-	public void testSetUsername() {
-		BankRecord bankRecord = new BankRecord();
-		//1. Create objects to be tested
-		BankCustomer customer = new BankCustomer("Test Customer", null, bankRecord);
-		
-		//2. Call methods to be tested
-		customer.setUsername("New Username");
+        //2. Use assertions to verify results both username and user ID
+        assertEquals(customer0.getUsername(), "Test Customer 0");
+        assertEquals(customer1.getUsername(), "Test Customer 1");
+        assertEquals(customer0.getUserID() + 1, customer1.getUserID());
+    }
+    
+    @Test
+    public void testSetUsername() {
+        BankRecord bankRecord = new BankRecord();
+        //1. Create objects to be tested
+        BankCustomer customer = new BankCustomer("Test Customer", null, bankRecord);
+        
+        //2. Call methods to be tested
+        customer.setUsername("New Username");
 
-		//2. Use assertions to verify results both username and user ID
-		assertEquals(customer.getUsername(), "New Username");
-	}
-	
-	@Test
-	public void testCreateNewAccount() {
-		BankRecord bankRecord = new BankRecord();
+        //2. Use assertions to verify results both username and user ID
+        assertEquals(customer.getUsername(), "New Username");
+    }
+    
+    @Test
+    public void testCreateNewAccount() {
+        BankRecord bankRecord = new BankRecord();
         BankCustomer customer2 = new BankCustomer("Alice", null, bankRecord);
         int userID = customer2.getUserID();
-        int accountID = customer2.addNewAccount(bankRecord);
+        int accountID = customer2.addNewCheckingAccount(bankRecord);
         List<Integer> userAccounts = customer2.getUserAccounts(bankRecord);
 
         assertTrue(userAccounts.contains(accountID));
         assertNotNull(bankRecord.getAccountIDAccounts().get(accountID));
-	}
-	
-	@Test
+    }
+    
+    @Test
     void testRemoveAccountThroughCustomer() {
-		BankRecord bankRecord = new BankRecord();
+        BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
-        int accountID = customer.addNewAccount(bankRecord);
+        int accountID = customer.addNewCheckingAccount(bankRecord);
 
         // Ensure account exists
         assertTrue(customer.getUserAccounts(bankRecord).contains(accountID));
@@ -81,15 +82,15 @@ public class BankCustomerTests {
         assertFalse(customer.getUserAccounts(bankRecord).contains(accountID));
         assertNull(bankRecord.getAccountIDAccounts().get(accountID));
     }
-	
-	@Test
-	void simpleValidAccountTransfer() {
-		// Create user with two accounts
-		BankRecord bankRecord = new BankRecord();
+    
+    @Test
+    void simpleValidAccountTransfer() {
+        // Create user with two accounts
+        BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         
-        int fundLosingAccountID = customer.addNewAccount(bankRecord);
-        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        int fundLosingAccountID = customer.addNewCheckingAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewCheckingAccount(bankRecord);
         
         BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
         BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
@@ -103,16 +104,16 @@ public class BankCustomerTests {
         
         assertEquals(fundLosingAccount.getCurrentBalance(), 50, 0.01);
         assertEquals(fundGainingAccount.getCurrentBalance(), 100, 0.01);
-	}
-	
-	@Test
-	void accountTransferFailDueToMinimumBalance() {
-		// Create user with two accounts
-		BankRecord bankRecord = new BankRecord();
+    }
+    
+    @Test
+    void accountTransferFailDueToMinimumBalance() {
+        // Create user with two accounts
+        BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         
-        int fundLosingAccountID = customer.addNewAccount(bankRecord);
-        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        int fundLosingAccountID = customer.addNewCheckingAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewCheckingAccount(bankRecord);
         
         BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
         BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
@@ -124,20 +125,20 @@ public class BankCustomerTests {
         
         // Transfer money
         try {
-        	customer.transferFundsBetweenAccount(fundLosingAccountID, fundGainingAccountID, 50);
+            customer.transferFundsBetweenAccount(fundLosingAccountID, fundGainingAccountID, 50);
         } catch (IllegalArgumentException e) {
-			assertTrue(e != null);
-		} 
-	}
-	
-	@Test
-	void accountTransferFailDueToWrongAccountID() {
-		// Create user with two accounts
-		BankRecord bankRecord = new BankRecord();
+            assertTrue(e != null);
+        } 
+    }
+    
+    @Test
+    void accountTransferFailDueToWrongAccountID() {
+        // Create user with two accounts
+        BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         
-        int fundLosingAccountID = customer.addNewAccount(bankRecord);
-        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        int fundLosingAccountID = customer.addNewCheckingAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewCheckingAccount(bankRecord);
         
         BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
         BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
@@ -149,20 +150,20 @@ public class BankCustomerTests {
         
         // Transfer money
         try {
-        	customer.transferFundsBetweenAccount(-10, fundGainingAccountID, 50);
+            customer.transferFundsBetweenAccount(-10, fundGainingAccountID, 50);
         } catch (IllegalArgumentException e) {
-			assertTrue(e != null);
-		} 
-	}
-	
-	@Test
-	void accountTransferFailDueToInsufficientFunds() {
-		// Create user with two accounts
-		BankRecord bankRecord = new BankRecord();
+            assertTrue(e != null);
+        } 
+    }
+    
+    @Test
+    void accountTransferFailDueToInsufficientFunds() {
+        // Create user with two accounts
+        BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         
-        int fundLosingAccountID = customer.addNewAccount(bankRecord);
-        int fundGainingAccountID = customer.addNewAccount(bankRecord);
+        int fundLosingAccountID = customer.addNewCheckingAccount(bankRecord);
+        int fundGainingAccountID = customer.addNewCheckingAccount(bankRecord);
         
         BankAccount fundLosingAccount = bankRecord.getAccountIDAccounts().get(fundLosingAccountID);
         BankAccount fundGainingAccount = bankRecord.getAccountIDAccounts().get(fundGainingAccountID);
@@ -173,9 +174,42 @@ public class BankCustomerTests {
         
         // Transfer money
         try {
-        	customer.transferFundsBetweenAccount(fundLosingAccountID, fundGainingAccountID, 50);
+            customer.transferFundsBetweenAccount(fundLosingAccountID, fundGainingAccountID, 50);
         } catch (IllegalArgumentException e) {
-			assertTrue(e != null);
-		} 
-	}
+            assertTrue(e != null);
+        } 
+    }
+    @Test
+void testMergeSameTypeAccounts() {
+    BankRecord bankRecord = new BankRecord();
+    BankCustomer customer = new BankCustomer("Test", "pass", bankRecord);
+
+    int acc1 = customer.addNewCheckingAccount(bankRecord);
+    int acc2 = customer.addNewCheckingAccount(bankRecord);
+
+    BankAccount a1 = bankRecord.getAccountIDAccounts().get(acc1);
+    BankAccount a2 = bankRecord.getAccountIDAccounts().get(acc2);
+
+    a1.deposit(100);
+    a2.deposit(50);
+
+    customer.mergeAccounts(acc1, acc2);
+
+    assertEquals(150.0, a1.getCurrentBalance(), 0.001);
+    assertNull(bankRecord.getAccountIDAccounts().get(acc2));
+    assertFalse(customer.getUserAccounts(bankRecord).contains(acc2));
 }
+@Test
+void testMergeDifferentTypeAccountsFails() {
+    BankRecord bankRecord = new BankRecord();
+    BankCustomer customer = new BankCustomer("Test", "pass", bankRecord);
+
+    int acc1 = customer.addNewCheckingAccount(bankRecord);
+    int acc2 = customer.addNewSavingsAccount(bankRecord);
+
+    assertThrows(IllegalArgumentException.class, () -> {
+        customer.mergeAccounts(acc1, acc2);
+    });
+}
+}
+

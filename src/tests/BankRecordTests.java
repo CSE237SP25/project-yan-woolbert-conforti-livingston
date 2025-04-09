@@ -44,7 +44,7 @@ public class BankRecordTests {
 	public void addOneAccount() {
 		//1. Create objects to be tested
 		BankRecord record = new BankRecord();
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 
 		//2. Call methods to be tested
 		record.addAccount(123, 1, account);
@@ -58,8 +58,8 @@ public class BankRecordTests {
 	public void addMultipleAccounts() {
 		//1. Create objects to be tested
 		BankRecord record = new BankRecord();
-		BankAccount account1 = new BankAccount();
-		BankAccount account2 = new BankAccount();
+		BankAccount account1 = new BankAccount(new BankRecord());
+		BankAccount account2 = new BankAccount(new BankRecord());
 
 		//2. Call methods to be tested
 		record.addAccount(123, 1, account1);
@@ -76,7 +76,7 @@ public class BankRecordTests {
 	public void addMultipleAccountsWithSameObject() {
 		//1. Create objects to be tested
 		BankRecord record = new BankRecord();
-		BankAccount account1 = new BankAccount();
+		BankAccount account1 = new BankAccount(new BankRecord());
 
 		//2. Call methods to be tested
 		//3. Use assertions to verify results
@@ -96,8 +96,8 @@ public class BankRecordTests {
 	public void addMultipleAccountsWithSameID() {
 		// 1. Create objects to be tested
 		BankRecord record = new BankRecord();
-		BankAccount account1 = new BankAccount();
-		BankAccount account2 = new BankAccount();
+		BankAccount account1 = new BankAccount(new BankRecord());
+		BankAccount account2 = new BankAccount(new BankRecord());
 
 		// 2. Call methods to be tested
 		// 3. Use assertions to verify results
@@ -118,7 +118,7 @@ public class BankRecordTests {
 		BankRecord bankRecord = new BankRecord();
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         int userID = customer.getUserID();
-        int accountID = customer.addNewAccount(bankRecord);
+        int accountID = customer.addNewCheckingAccount(bankRecord);
         BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
 
         // Verify account exists before deletion
@@ -151,7 +151,7 @@ public class BankRecordTests {
         BankCustomer customer = new BankCustomer("Alice", null, bankRecord);
         BankCustomer anotherCustomer = new BankCustomer("Bob", null, bankRecord);
         int userID = customer.getUserID();
-        int accountID = customer.addNewAccount(bankRecord);
+        int accountID = customer.addNewCheckingAccount(bankRecord);
         BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
 
         // Try deleting Alice's account as Bob

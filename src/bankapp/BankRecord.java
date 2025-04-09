@@ -10,23 +10,30 @@ public class BankRecord {
 
 	// Private variable declarations
 	private Map<Integer, ArrayList<Integer>> userIDAccountIDs;
+	private Map<Integer, Integer> accountIDUserID;
 	private Map<Integer, BankCustomer> userIDCustomer;
 	private Map<Integer, BankAccount> accountIDAccounts;
+	private Map<Integer, ArrayList<TransactionInfo>> userIDTransactionHistory;
 	private Set<String> registeredUsernames;
 
 	
 	// Default constructor for BankRecord
 	public BankRecord() {
 		this.userIDAccountIDs = new HashMap<>();
+		this.accountIDUserID = new HashMap<>();
 		this.userIDCustomer = new HashMap<>();
 		this.accountIDAccounts = new HashMap<>();
+		this.userIDTransactionHistory = new HashMap<>();
 		this.registeredUsernames = new HashSet<>();
-		
 	}
 	
 	//Getters for all hashMaps
 	public Map<Integer, ArrayList<Integer>> getUserIDAccountIDs() {
 		return userIDAccountIDs;
+	}
+	
+	public Map<Integer, Integer> getAccountIDUserID() {
+		return accountIDUserID;
 	}
 
 	public Map<Integer, BankCustomer> getUserIDCustomer() {
@@ -59,12 +66,14 @@ public class BankRecord {
 			}
 			else {
 			accountIDAccounts.put(accountID, account);
+			accountIDUserID.put(accountID, userID);
 			userIDAccountIDs.get(userID).add(accountID);
 			}
 		}
 		else {
 		userIDAccountIDs.put(userID, new ArrayList<Integer>());
 		userIDAccountIDs.get(userID).add(accountID);
+		accountIDUserID.put(accountID, userID);
 		accountIDAccounts.put(accountID, account);
 		}
 		
@@ -96,4 +105,17 @@ public class BankRecord {
 	    }
 	    return null; // Not found
 	}
+	
+	// Methods relating to transaction recording
+	public void recordTransaction(int userID, TransactionInfo transaction) {
+        // Add array list if needed
+        if (!userIDTransactionHistory.containsKey(userID)) {
+            userIDTransactionHistory.put(userID, new ArrayList<TransactionInfo>());
+        }
+        userIDTransactionHistory.get(userID).add(transaction);
+    }
+    
+    public ArrayList<TransactionInfo> getTransactionHistory(int userID) {
+        return userIDTransactionHistory.get(userID);
+    }
 }

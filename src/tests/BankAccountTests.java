@@ -19,7 +19,7 @@ public class BankAccountTests {
 	@Test
 	public void testSimpleDeposit() {
 		//1. Create objects to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 		
 		//2. Call the method being tested
 		account.deposit(25);
@@ -31,7 +31,7 @@ public class BankAccountTests {
 	@Test
 	public void testNegativeDeposit() {
 		//1. Create object to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 
 		try {
 			account.deposit(-25);
@@ -44,7 +44,7 @@ public class BankAccountTests {
 	@Test
 	public void testSimpleWithdrawal() {
 		//1. Create objects to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 				
 		//2. Call the method being tested
 		account.deposit(25);
@@ -57,7 +57,7 @@ public class BankAccountTests {
 	@Test
 	public void testNegativeWithdrawal() {
 		//1. Create object to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 
 		try {
 			account.withdraw(-25);
@@ -71,16 +71,37 @@ public class BankAccountTests {
 	@Test
 	public void testOverWithdrawal() {
 		//1. Create objects to be tested
-		BankAccount account = new BankAccount();
+		BankAccount account = new BankAccount(new BankRecord());
 		
 		account.deposit(25);
-				
+		account.withdraw(50);
+		
+		//withdraw amount plus $25 fee
+		assertEquals(-50, account.getCurrentBalance(), 0.005);
+	}
+	@Test
+	public void testFreezePreventsWithdrawal() {
+		BankAccount account = new BankAccount(new BankRecord());
+		account.deposit(50);	
+		account.freezeAccount();
+		
 		try {
-			account.withdraw(50);
+			account.withdraw(25);
 			fail();
-		} catch (IllegalArgumentException e) {
+		}catch (IllegalStateException e) {
 			assertTrue(e != null);
-		}
+		}	
+	}
+	@Test
+	public void testFreezePreventsDeposit() {
+		BankAccount account = new BankAccount(new BankRecord());
+		account.freezeAccount();					
+		try {
+			account.deposit(50);
+			fail();
+		}catch (IllegalStateException e) {
+			assertTrue(e != null);
+		}	
 	}
 	
 	
@@ -91,9 +112,9 @@ public class BankAccountTests {
         int userID = customer.getUserID();
 
         // Create multiple accounts
-        int accountID1 = customer.addNewAccount(bankRecord);
-        int accountID2 = customer.addNewAccount(bankRecord);
-        int accountID3 = customer.addNewAccount(bankRecord);
+        int accountID1 = customer.addNewCheckingAccount(bankRecord);
+        int accountID2 = customer.addNewCheckingAccount(bankRecord);
+        int accountID3 = customer.addNewCheckingAccount(bankRecord);
 
         // Collect account IDs in a Set (ensures uniqueness)
         Set<Integer> accountIDs = new HashSet<>();
@@ -111,18 +132,10 @@ public class BankAccountTests {
         assertTrue(userAccounts.contains(accountID3));
 	}
 	
-	@Test
-	public void testSetMinimumBalance() {
-		BankAccount account = new BankAccount(100);
-		
-		account.setMinimumBalance(50);
-		
-		assertEquals(50.0, account.getMinimumBalance(), 0.005);
-	}
 	
 	@Test
 	public void testNegativeMinimumBalance() {
-		BankAccount account = new BankAccount(100);
+		BankAccount account = new BankAccount(100, new BankRecord());
 
 		try {
 			account.withdraw(-100);
@@ -131,24 +144,33 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}
 	}
-	
-	@Test 
-	public void testWithdrawBelowMinimumBalance(){
-		BankAccount account = new BankAccount(50);
-		account.deposit(100);
-		
+	@Test
+	public void testMinimumBalanceNotLowerThanBalance() {
+		BankAccount account = new BankAccount(100, new BankRecord());
+		account.deposit(1);
 		try {
-			account.withdraw(60);
+			account.setMinimumBalance(10);;
 			fail();
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			assertTrue(e != null);
 		}
 	}
 	
 	@Test 
+	public void testWithdrawBelowMinimumBalance(){
+		//aka testing charging overdraft fee
+		BankAccount account = new BankAccount(50, new BankRecord());
+		account.deposit(100);
+		
+		account.withdraw(60);
+		
+		//100 - 60 - 25 (overdraft fee) = 15
+		assertEquals(15.0, account.getCurrentBalance(), 0.005);
+	}
+	
+	@Test 
 	public void testWithdrawAboveMinimumBalance(){
-		BankAccount account = new BankAccount(50);
+		BankAccount account = new BankAccount(50, new BankRecord());
 		account.deposit(100);
 		
 		account.withdraw(40);
@@ -158,7 +180,7 @@ public class BankAccountTests {
 	
 	@Test 
 	public void testWithdrawExactAmountToReachMinimumBalance(){
-		BankAccount account = new BankAccount(50);
+		BankAccount account = new BankAccount(50, new BankRecord());
 		account.deposit(100);
 		
 		account.withdraw(50);
