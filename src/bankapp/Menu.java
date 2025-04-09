@@ -2,6 +2,7 @@ package bankapp;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Menu {
     private BankRecord bankRecord;
@@ -14,6 +15,7 @@ public class Menu {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+        	System.out.println("\nFinancial Tidbit of the Day: " + generateFinancialTip());
             System.out.println("\n1. Sign Up");
             System.out.println("2. Log In");
             System.out.println("3. Exit");
@@ -37,7 +39,46 @@ public class Menu {
             }
         }
     }
-    private void signUp(Scanner scanner) {
+
+	private String generateFinancialTip() {
+		Random generateRandom = new Random();
+		int randomNumber = generateRandom.nextInt(10);
+		if (randomNumber == 0) {
+			return "Create a budget. Then, actually use it!";
+		}
+		else if (randomNumber == 1) {
+			return "Avoid gambling! Gambling 1) can be addicting and 2) can lead to ruin.";
+		}
+		else if (randomNumber == 2) {
+			return "Save for your future! Retirement may be closer than it appears.";
+		}
+		else if (randomNumber == 3) {
+			return "Save for emergencies. Seems unnecessary until it isn't.";
+		}
+		else if (randomNumber == 4) {
+			return "Be aware that some of the money you earn will be taken from you by the government. But take heart: no taxation without representation, right?";
+		}
+		else if (randomNumber == 5) {
+			return "Keep track of your credit! Pay bills on time or else you will not have the necessary credit to buy both Boardwalk and Park Place and build your dream hotel.";
+		}
+		else if (randomNumber == 6) {
+			return "Invest! Start with one of our high-yield savings accounts, or move to Wall Street.";
+		}
+		else if (randomNumber == 7) {
+			return "Prepare your estate. You do not know what tomorrow will bring.";
+		}
+		else if (randomNumber == 8) {
+			return "Do not commit fraud, lest you will not be able to pass go or collect $200 and will be forced to go directly to jail.";
+		}
+		else if (randomNumber == 9) {
+			return "Want advice? Hire one of our financial advisors! Though our financial advisors are not, your future is priceless :)";
+		}
+		else {
+			return null;
+		}
+	}
+
+	private void signUp(Scanner scanner) {
         try{
             System.out.print("Enter your new username: ");
             String newUsername = scanner.nextLine();
