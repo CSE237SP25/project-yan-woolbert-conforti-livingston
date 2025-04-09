@@ -13,12 +13,18 @@ public class HighYieldSavingsAccount extends SavingsAccount {
 
     @Override
     public void deposit(double amount) {
+        if (isFrozen) {
+            throw new IllegalStateException("Account is frozen. No deposits allowed.");
+        }
         super.deposit(amount);
         depositDates.add(LocalDate.now());
     }
 
     @Override
     public void withdraw(double amount) {
+        if (isFrozen) {
+            throw new IllegalStateException("Account is frozen. No withdrawals allowed.");
+        }
         LocalDate today = LocalDate.now();
         for (LocalDate depositDate : depositDates) {
             if (!depositDate.isBefore(today.minusDays(1))) {

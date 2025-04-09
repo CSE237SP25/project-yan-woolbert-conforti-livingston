@@ -144,6 +144,17 @@ public class BankAccountTests {
 			assertTrue(e != null);
 		}
 	}
+	@Test
+	public void testMinimumBalanceNotLowerThanBalance() {
+		BankAccount account = new BankAccount(100, new BankRecord());
+		account.deposit(1);
+		try {
+			account.setMinimumBalance(10);;
+			fail();
+		} catch (IllegalArgumentException e) {
+			assertTrue(e != null);
+		}
+	}
 	
 	@Test 
 	public void testWithdrawBelowMinimumBalance(){
