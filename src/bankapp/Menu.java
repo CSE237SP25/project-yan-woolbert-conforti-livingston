@@ -271,7 +271,7 @@ public class Menu {
         }catch (IllegalArgumentException e) {
             System.out.println("Error: Please enter a valid amount. Amount must be positive.");
         } catch (Exception e) {
-            System.out.println("Error: Please enter a valid number.");
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -294,7 +294,7 @@ public class Menu {
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error: Please enter a valid number.");
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -362,7 +362,7 @@ public class Menu {
                         double minimumBalance = Double.parseDouble(scanner.nextLine());
                         bankRecord.getAccountIDAccounts().get(minimumAccountID).setMinimumBalance(minimumBalance);
         } catch (Exception e) {
-            System.out.println("Error: Please enter a valid account ID and minimum amount > 0.");
+            System.out.println("Error: Please enter a valid account ID and minimum balance greater than or equal to your current balance.");
         }
     }
 

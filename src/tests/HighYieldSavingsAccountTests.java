@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.time.LocalDate;
@@ -58,4 +60,31 @@ public class HighYieldSavingsAccountTests {
         Exception e = assertThrows(IllegalArgumentException.class, () -> account.withdraw(50.0));
         assertEquals("Withdrawal blocked: Must wait 1 full day after any deposit.", e.getMessage());
     }
+    @Test
+	public void testFreezePreventsWithdrawal() {
+		HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.01, LocalDate.now().minusDays(1), new BankRecord());
+        account.deposit(100.0);
+        //clear dates and set deposit date to 2 days ago, should allow withdrawal
+        account.getDepositDates().clear();
+        account.getDepositDates().add(LocalDate.now().minusDays(2));
+		account.freezeAccount();
+		
+		try {
+			account.withdraw(25);
+			fail();
+		}catch (IllegalStateException e) {
+			assertTrue(e != null);
+		}	
+	}
+	@Test
+	public void testFreezePreventsDeposit() {
+		HighYieldSavingsAccount account = new HighYieldSavingsAccount(0.01, LocalDate.now().minusDays(1), new BankRecord());
+		account.freezeAccount();					
+		try {
+			account.deposit(50);
+			fail();
+		}catch (IllegalStateException e) {
+			assertTrue(e != null);
+		}	
+	}
 }
