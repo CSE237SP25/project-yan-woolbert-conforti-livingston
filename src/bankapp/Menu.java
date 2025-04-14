@@ -125,8 +125,9 @@ public class Menu {
             System.out.println("9. View Transaction History");
             System.out.println("10. Freeze Account");
             System.out.println("11. Unfreeze Account");
-            System.out.println("12. Log Out");
-            System.out.print("Choose an option 1-12: ");
+            System.out.println("12. Refer a Friend");
+            System.out.println("13. Log Out");
+            System.out.print("Choose an option 1-13: ");
 
             String choice = scanner.nextLine();
 
@@ -165,6 +166,9 @@ public class Menu {
                     unfreezeAccount(scanner, customer);
                     break;
                 case "12":
+                	referFriend(scanner, customer);
+                	break;
+                case "13":
                     System.out.println("Logging out...");
                     return;
                 default:
@@ -173,7 +177,39 @@ public class Menu {
         }
     }
     
-    private void viewTransactionHistory(Scanner scanner, BankCustomer customer) {
+    private void referFriend(Scanner scanner, BankCustomer customer) {
+		System.out.println("Please enter the email address of your friend: ");
+		String email = scanner.nextLine();
+		if (!email.contains(".com") || !email.contains("@")) {
+			System.out.println("Invalid email address. Returning to Menu...");
+		}
+		else {
+			System.out.println("Your friend will now be contacted with marketing materials.");
+			referralReward(scanner, customer);
+		}
+	}
+    
+    private void referralReward(Scanner scanner, BankCustomer customer) {
+        try{
+            System.out.print("Enter account ID to deposit into: ");
+            int depID = Integer.parseInt(scanner.nextLine());
+            BankAccount account = bankRecord.getAccountIDAccounts().get(depID);
+            if (account == null || !customer.getUserAccounts(bankRecord).contains(depID)) {
+                System.out.println("Error: Account not found or not owned by you.");
+                return;
+            }
+            if (account instanceof SavingsAccount) {
+                ((SavingsAccount) account).updateInterest();
+            }
+            double depositAmt = 1.00;
+            account.deposit(depositAmt);
+            System.out.println("Deposited $" + depositAmt + " to account " + depID);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+	private void viewTransactionHistory(Scanner scanner, BankCustomer customer) {
     	try {
     		System.out.println("Would you like to view the history of all accounts (1) or view the history of a specific account? Choose 1-2:");
     		int choice = Integer.parseInt(scanner.nextLine());
