@@ -29,8 +29,9 @@ public class CustomerMenu {
             System.out.println("10. Freeze Account");
             System.out.println("11. Unfreeze Account");
             System.out.println("12. Refer a Friend");
-            System.out.println("13. Log Out");
-            System.out.print("Choose an option 1-13: ");
+            System.out.println("13. Change your Password");
+            System.out.println("14. Log Out");
+            System.out.print("Choose an option 1-14: ");
 
             String choice = scanner.nextLine();
             if (handleCustomerChoice(choice, scanner, customer)) break;
@@ -51,12 +52,33 @@ public class CustomerMenu {
             case "10": freezeAccount(scanner, customer); break;
             case "11": unfreezeAccount(scanner, customer); break;
             case "12": referFriend(scanner, customer); break;
-            case "13": System.out.println("Logging out..."); return true;
+            case "13": changePassword(scanner, customer); break;
+            case "14": System.out.println("Logging out..."); return true;
             default: System.out.println("Invalid choice.");
         }
         return false;
     }
-    
+    private void changePassword(Scanner scanner, BankCustomer customer){
+        System.out.println("Please enter your current password");
+        String currPass = scanner.nextLine();
+        if (customer.isPasswordCorrect(currPass)) {
+            System.out.println("Please enter your new password");
+            String newPassword = scanner.nextLine();
+            System.out.println("Please enter your new password again to confirm");
+            String confirmNewPassword = scanner.nextLine();
+            if(confirmNewPassword.equals(newPassword)){
+                customer.setPassword(newPassword);
+                System.out.println("Password successfully changed!");
+
+            }
+            else{
+                System.out.println("Passwords do not match. Please try again.");
+            }
+        } else {
+            System.out.println("Incorrect current password.");
+        }
+        return;
+    }
     private void referFriend(Scanner scanner, BankCustomer customer) {
 		System.out.println("Please enter the email address of your friend: ");
 		String email = scanner.nextLine();
