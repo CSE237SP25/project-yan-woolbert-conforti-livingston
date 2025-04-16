@@ -6,14 +6,14 @@ import org.junit.Test;
 
 import bankapp.BankCustomer;
 import bankapp.BankRecord;
-import bankapp.Menu;
+import bankapp.MainMenu;
 
-public class MenuTests {
+public class MainMenuTests {
 	
 	@Test
 	public void testSignUpNewCustomer() {
 		// 1. Set up objects being tested
-		Menu menu = new Menu();
+		MainMenu mainMenu = new MainMenu();
 		BankRecord bankRecord = new BankRecord();
 		String username = "TestUser";
 		String password = "TestPassword1";
@@ -31,7 +31,7 @@ public class MenuTests {
 	public void testMultipleSignUps() {
 		//1. Set up objects being tested
 		
-		Menu menu = new Menu ();
+		MainMenu mainMenu = new MainMenu();
 		BankRecord bankRecord = new BankRecord();
 		String username1 = "UserName1";
 		String username2 = "UserName2";

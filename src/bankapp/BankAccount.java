@@ -10,7 +10,8 @@ public class BankAccount {
     protected double minimumBalance;
     protected BankRecord bankRecord;
     protected boolean isFrozen = false;
-    
+    private boolean hasMinimumBalance = false;
+
     // Default constructor for BankCustomer
     public BankAccount(BankRecord bankRecord) {
         this.accountID = numberOfAccounts++;
@@ -65,7 +66,8 @@ public class BankAccount {
         if(this.balance - amount < minimumBalance) {
             double overdraftFee = 25.0;
             this.balance -= (amount + overdraftFee);
-            
+            System.out.println("Overdraft fee of $" + overdraftFee + " applied.");
+
             Integer userID = bankRecord.getAccountIDUserID().get(this.accountID);
             if (userID != null) {
             	TransactionInfo transaction = new TransactionInfo("Withdrawal", amount, this.accountID);
@@ -91,6 +93,10 @@ public class BankAccount {
         if(minimumBalance < 0 | minimumBalance > this.balance)
             throw new IllegalArgumentException();
         this.minimumBalance = minimumBalance;
+        this.hasMinimumBalance = true;
+    }
+    public boolean hasMinimumBalanceSet() {
+        return this.hasMinimumBalance;
     }
     
     public double getMinimumBalance() {
