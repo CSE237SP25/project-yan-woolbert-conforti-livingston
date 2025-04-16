@@ -110,6 +110,10 @@ public class BankCustomer {
         return this.userID;
     }
     
+    public void setPassword(String newPassword){
+        this.password = newPassword;
+    }
+
     public  ArrayList<Integer> getUserAccounts(BankRecord bankRecord) {
         ArrayList<Integer> accountIDs = bankRecord.getUserIDAccountIDs().get(this.userID);
         return accountIDs;
