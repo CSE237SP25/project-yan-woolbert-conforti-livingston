@@ -10,7 +10,6 @@ import org.junit.Test;
 import bankapp.BankAccount;
 import bankapp.BankCustomer;
 import bankapp.BankRecord;
-import bankapp.Menu;
 import bankapp.TransactionInfo;
 
 public class TransactionInfoTests {
