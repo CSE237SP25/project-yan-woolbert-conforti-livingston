@@ -280,9 +280,6 @@ public class CustomerMenu {
         }
     }
 
-    public void signUpCustomer(String username, String password, BankRecord bankRecord) {
-        BankCustomer newCustomer = new BankCustomer(username, password, bankRecord);
-    }
 
     private void validateAccountOwnership(BankCustomer customer, int id){
         BankAccount account = bankRecord.getAccountIDAccounts().get(id);
