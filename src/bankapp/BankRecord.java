@@ -58,7 +58,28 @@ public class BankRecord {
     	registeredUsernames.add(customer.getUsername());
 		}
 	}
-
+	public boolean isUsernameTaken(String newUsername) {
+		if (registeredUsernames.contains(newUsername)) {
+	       return true;
+	    }
+		return false;
+	}
+	public void addUsername(String u){
+		if (registeredUsernames.contains(u)) {
+			throw new IllegalArgumentException("Unable to add a username that is already in the list.");
+		}
+		else{
+			registeredUsernames.add(u);
+		}
+	}
+	public void removeUsername(String u){
+		if (registeredUsernames.contains(u)) {
+			registeredUsernames.remove(u);
+		}
+		else{
+			throw new IllegalArgumentException("Unable to remove a username that is not already in the list.");
+		}
+	}
 	public void addAccount(int userID, int accountID, BankAccount account) {
 		if(getUserIDAccountIDs().containsKey(userID)) {
 			if (getAccountIDAccounts().values().contains(account) || getAccountIDAccounts().containsKey(accountID)) {

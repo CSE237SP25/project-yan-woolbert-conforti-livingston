@@ -103,7 +103,17 @@ public class BankCustomer {
     }
         
     public void setUsername(String u) {
-        this.username = u;
+        if(this.username.equals(u)){
+            throw new IllegalArgumentException("You cannot change your username to your current username.");
+        }
+        if(this.bankRecord.isUsernameTaken(u)){
+            throw new IllegalArgumentException("This username is already taken. Please choose another username.");
+        }
+        else{
+            this.bankRecord.removeUsername(this.username);
+            this.username = u;
+            this.bankRecord.addUsername(u);
+        }
     }
     
     public int getUserID() {
