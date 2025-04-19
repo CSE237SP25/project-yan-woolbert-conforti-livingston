@@ -30,8 +30,9 @@ public class CustomerMenu {
             System.out.println("11. Unfreeze Account");
             System.out.println("12. Refer a Friend");
             System.out.println("13. Change your Password");
-            System.out.println("14. Log Out");
-            System.out.print("Choose an option 1-14: ");
+            System.out.println("14. Change your Username");
+            System.out.println("15. Log Out");
+            System.out.print("Choose an option 1-15: ");
 
             String choice = scanner.nextLine();
             if (handleCustomerChoice(choice, scanner, customer)) break;
@@ -53,10 +54,37 @@ public class CustomerMenu {
             case "11": unfreezeAccount(scanner, customer); break;
             case "12": referFriend(scanner, customer); break;
             case "13": changePassword(scanner, customer); break;
-            case "14": System.out.println("Logging out..."); return true;
+            case "14": changeUsername(scanner, customer); break;
+            case "15": System.out.println("Logging out..."); return true;
             default: System.out.println("Invalid choice.");
         }
         return false;
+    }
+    private void changeUsername(Scanner scanner, BankCustomer customer){
+        System.out.println("Please enter your current password");
+        String currPass = scanner.nextLine();
+        if (customer.isPasswordCorrect(currPass)) {
+            System.out.println("Please enter your new username");
+            String newUsername = scanner.nextLine();
+            System.out.println("Please enter your new username again to confirm");
+            String confirmNewUsername = scanner.nextLine();
+            if(confirmNewUsername.equals(newUsername)){
+                try{
+                customer.setUsername(newUsername);
+                System.out.println("Username successfully changed!");
+                }
+                catch (Exception e) {
+                    System.out.println("Error: " + e.getMessage());
+                    return;
+                }
+            }
+            else{
+                System.out.println("Usernames do not match. Please try again.");
+            }
+        } else {
+            System.out.println("Incorrect current password.");
+        }
+        return;
     }
     private void changePassword(Scanner scanner, BankCustomer customer){
         System.out.println("Please enter your current password");
