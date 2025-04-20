@@ -51,6 +51,13 @@ public class BankCustomer {
         return newAccount.getAccountID();
     }
     
+    public int addNewHighSchoolAccount(BankRecord bankRecord) {
+        HighSchoolStudentAccount newAccount = new HighSchoolStudentAccount(bankRecord);
+        bankRecord.addAccount(this.userID, newAccount.getAccountID(), newAccount);
+        return newAccount.getAccountID();
+    }
+    
+    
     public void removeAccount(BankRecord bankRecord, int accountID) {
         bankRecord.deleteAccount(this.userID, accountID);
     }
