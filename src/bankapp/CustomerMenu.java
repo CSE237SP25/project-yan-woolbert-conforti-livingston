@@ -33,8 +33,9 @@ public class CustomerMenu {
             System.out.println("13. Change your Password");
             System.out.println("14. Change your Username");
             System.out.println("15. Gamble Funds");
-            System.out.println("16. Log Out");
-            System.out.print("Choose an option 1-16: ");
+            System.out.println("16. Set Account Nickname");
+            System.out.println("17. Log Out");
+            System.out.print("Choose an option 1-17: ");
 
             String choice = scanner.nextLine();
             if (handleCustomerChoice(choice, scanner, customer)) break;
@@ -58,10 +59,25 @@ public class CustomerMenu {
             case "13": changePassword(scanner, customer); break;
             case "14": changeUsername(scanner, customer); break;
             case "15": gambleFunds(scanner, customer); break;
-            case "16": System.out.println("Logging out..."); return true;
+            case "16": setAccountNickname(scanner, customer); break;
+            case "17": System.out.println("Logging out..."); return true;
             default: System.out.println("Invalid choice.");
         }
         return false;
+    }
+    
+    public void setAccountNickname(Scanner scanner, BankCustomer customer) {
+    	try {
+    		System.out.println("Please specify the account who's nickname you want to set: ");
+        	int accountID = Integer.parseInt(scanner.nextLine());
+        	validateAccountOwnership(customer, accountID);
+        	BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
+        	System.out.println("Please enter your desired nickname: ");
+        	String nickname = scanner.nextLine();
+        	account.setAccountNickname(nickname);
+    	} catch (Exception e) {
+			System.out.println("Error: Invalid input.");
+		}
     }
     
     private void updateFundsBasedOnGamble(BankAccount account, double gambleAmt) {
@@ -329,7 +345,7 @@ public class CustomerMenu {
                 String minBalanceDisplay = acc.hasMinimumBalanceSet()
                     ? "$" + acc.getMinimumBalance()
                     : "No minimum balance";
-                System.out.println("Account ID: " + id + " | Type: " + type + " | Balance: $" + acc.getCurrentBalance() + " / Min: " + minBalanceDisplay);
+                System.out.println("Account ID: " + id + " | Nickname: " + acc.getAccountNickname() + " | Type: " + type + " | Balance: $" + acc.getCurrentBalance() + " / Min: " + minBalanceDisplay);
             }
         }    
     }

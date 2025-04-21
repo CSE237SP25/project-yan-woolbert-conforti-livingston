@@ -10,6 +10,7 @@ public class BankAccount {
     protected double minimumBalance;
     protected BankRecord bankRecord;
     protected boolean isFrozen = false;
+    protected String accountNickname = "N/A";
     private boolean hasMinimumBalance = false;
 
     // Default constructor for BankCustomer
@@ -109,6 +110,14 @@ public class BankAccount {
     
     public int getAccountID() {
         return this.accountID;
+    }
+    
+    public String getAccountNickname() {
+    	return this.accountNickname;
+    }
+    
+    public void setAccountNickname(String nickname) {
+    	this.accountNickname = nickname;
     }
 }
 
