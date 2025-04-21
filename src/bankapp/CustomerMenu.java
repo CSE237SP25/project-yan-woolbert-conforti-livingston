@@ -3,6 +3,7 @@ package bankapp;
 import java.util.Scanner;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CustomerMenu {
     private Scanner scanner;
@@ -31,8 +32,9 @@ public class CustomerMenu {
             System.out.println("12. Refer a Friend");
             System.out.println("13. Change your Password");
             System.out.println("14. Change your Username");
-            System.out.println("15. Log Out");
-            System.out.print("Choose an option 1-15: ");
+            System.out.println("15. Gamble Funds");
+            System.out.println("16. Log Out");
+            System.out.print("Choose an option 1-16: ");
 
             String choice = scanner.nextLine();
             if (handleCustomerChoice(choice, scanner, customer)) break;
@@ -55,58 +57,90 @@ public class CustomerMenu {
             case "12": referFriend(scanner, customer); break;
             case "13": changePassword(scanner, customer); break;
             case "14": changeUsername(scanner, customer); break;
-            case "15": System.out.println("Logging out..."); return true;
+            case "15": gambleFunds(scanner, customer); break;
+            case "16": System.out.println("Logging out..."); return true;
             default: System.out.println("Invalid choice.");
         }
         return false;
     }
-    private void changeUsername(Scanner scanner, BankCustomer customer){
-        System.out.println("Please enter your current password");
-        String currPass = scanner.nextLine();
-        if (customer.isPasswordCorrect(currPass)) {
-            System.out.println("Please enter your new username");
-            String newUsername = scanner.nextLine();
-            System.out.println("Please enter your new username again to confirm");
-            String confirmNewUsername = scanner.nextLine();
-            if(confirmNewUsername.equals(newUsername)){
-                try{
-                customer.setUsername(newUsername);
-                System.out.println("Username successfully changed!");
-                }
-                catch (Exception e) {
-                    System.out.println("Error: " + e.getMessage());
-                    return;
-                }
-            }
-            else{
-                System.out.println("Usernames do not match. Please try again.");
-            }
+    
+    private void updateFundsBasedOnGamble(BankAccount account, double gambleAmt) {
+    	// Calculate 0 or 1
+        Random rand = new Random();
+        int bit = rand.nextInt(2);
+        System.out.println("Result: " + bit);
+        if (bit == 1) {
+        	System.out.println("You win!");
+        	account.deposit(gambleAmt);
+            System.out.println("Deposited $" + gambleAmt + " to account " + account.getAccountID());
         } else {
-            System.out.println("Incorrect current password.");
+        	System.out.println("You lose!");
+        	account.withdraw(gambleAmt);
+            System.out.println("Withdrew $" + gambleAmt + " from account " + account.getAccountID());
         }
-        return;
     }
-    private void changePassword(Scanner scanner, BankCustomer customer){
-        System.out.println("Please enter your current password");
-        String currPass = scanner.nextLine();
-        if (customer.isPasswordCorrect(currPass)) {
-            System.out.println("Please enter your new password");
-            String newPassword = scanner.nextLine();
-            System.out.println("Please enter your new password again to confirm");
-            String confirmNewPassword = scanner.nextLine();
-            if(confirmNewPassword.equals(newPassword)){
-                customer.setPassword(newPassword);
-                System.out.println("Password successfully changed!");
+    
+    private void gambleFunds(Scanner scanner, BankCustomer customer) {
+    	try {
+    		System.out.println("You are about to play double-or-nothing (0 - you lose, 1 - you win).");
+    		System.out.println("Please specify the account who's funds you want to gamble with: ");
+        	int accountID = Integer.parseInt(scanner.nextLine());
+        	validateAccountOwnership(customer, accountID);
+        	BankAccount account = bankRecord.getAccountIDAccounts().get(accountID);
+        	System.out.print("Enter amount to gamble: ");
+            double gambleAmt = Double.parseDouble(scanner.nextLine());
+            if (gambleAmt > account.getCurrentBalance()) {
+            	System.out.println("Cannot gamble with more money than you have in your account!");
+            	return;
+            }
+            updateFundsBasedOnGamble(account, gambleAmt);
+	    } catch (Exception e) {
+			System.out.println("Error: Invalid input.");
+		}
+    }
+    
+    private String getVerifiedNewValue(Scanner scanner, BankCustomer customer, String fieldType) {
+        System.out.println("Please enter your current password:");
+        String currentPassword = scanner.nextLine();
 
-            }
-            else{
-                System.out.println("Passwords do not match. Please try again.");
-            }
-        } else {
+        if (!customer.isPasswordCorrect(currentPassword)) {
             System.out.println("Incorrect current password.");
+            return null;
         }
-        return;
+
+        System.out.println("Please enter your new " + fieldType + ":");
+        String newValue = scanner.nextLine();
+        System.out.println("Please confirm your new " + fieldType + ":");
+        String confirmNewValue = scanner.nextLine();
+
+        if (!newValue.equals(confirmNewValue)) {
+            System.out.println("New " + fieldType + " entries do not match. Please try again.");
+            return null;
+        }
+
+        return newValue;
     }
+
+    private void changeUsername(Scanner scanner, BankCustomer customer) {
+        String newUsername = getVerifiedNewValue(scanner, customer, "username");
+        if (newUsername == null) return;
+
+        try {
+            customer.setUsername(newUsername);
+            System.out.println("Username successfully changed!");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void changePassword(Scanner scanner, BankCustomer customer) {
+        String newPassword = getVerifiedNewValue(scanner, customer, "password");
+        if (newPassword == null) return;
+
+        customer.setPassword(newPassword);
+        System.out.println("Password successfully changed!");
+    }
+    
     private void referFriend(Scanner scanner, BankCustomer customer) {
 		System.out.println("Please enter the email address of your friend: ");
 		String email = scanner.nextLine();
@@ -150,26 +184,27 @@ public class CustomerMenu {
             System.out.println("Error: " + e.getMessage());
         }
     }
+	
     private void viewAllTransactionHistory(BankCustomer customer){
         ArrayList<TransactionInfo> history = bankRecord.getTransactionHistory(customer.getUserID());
-    			if (history != null) {
-	    			for (TransactionInfo transactionInfo : history) {
-	    				System.out.println(transactionInfo.toString());
-	    			}
-    			}
+    	if (history != null) {
+	   		for (TransactionInfo transactionInfo : history) {
+	  			System.out.println(transactionInfo.toString());
+	   		}
+    	}
     }
     private void viewOneAccountTransactionHistory(BankCustomer customer, Scanner scanner){
         System.out.println("Please specify the account who's history you want to view: ");
-    			int accountID = Integer.parseInt(scanner.nextLine());
-    			validateAccountOwnership(customer, accountID);
-    			ArrayList<TransactionInfo> history = bankRecord.getTransactionHistory(customer.getUserID());
-    			if (history != null) {
-	    			for (TransactionInfo transactionInfo : history) {
-	    				if (transactionInfo.getAccountID() == accountID) {
-	    					System.out.println(transactionInfo.toString());
-	    				}
-	    			}
-    			}
+    	int accountID = Integer.parseInt(scanner.nextLine());
+    	validateAccountOwnership(customer, accountID);
+    	ArrayList<TransactionInfo> history = bankRecord.getTransactionHistory(customer.getUserID());
+    	if (history != null) {
+	    	for (TransactionInfo transactionInfo : history) {
+	    		if (transactionInfo.getAccountID() == accountID) {
+	    			System.out.println(transactionInfo.toString());
+	    		}
+	    	}
+    	}
     }
     private void mergeAccounts(Scanner scanner, BankCustomer customer) {
         try {
@@ -214,8 +249,7 @@ public class CustomerMenu {
             validateAccountOwnership(customer, accountId);
     		account.freezeAccount();
     		System.out.println("Account " + accountId + " has been frozen.");
-    		
-    	}catch (Exception e) {
+    	} catch (Exception e) {
     		System.out.println("Error: Invalid input.");
     	}
     }
@@ -343,4 +377,3 @@ public class CustomerMenu {
         }
     }
 }
-
