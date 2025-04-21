@@ -287,9 +287,10 @@ public class CustomerMenu {
                 if (acc instanceof SavingsAccount) {
                     ((SavingsAccount) acc).updateInterest();
                 }
-                String type = acc instanceof HighSchoolStudentAccount ? "High School Student Account"
+                String type = acc instanceof CollegeStudentAccount ? "College Student Account"
+                :acc instanceof HighSchoolStudentAccount ? "High School Student Account"
                 :acc instanceof HighYieldSavingsAccount ? "High-Yield Savings"
-                : acc instanceof SavingsAccount ? "Savings"
+                :acc instanceof SavingsAccount ? "Savings"
                 : "Checking";
                 String minBalanceDisplay = acc.hasMinimumBalanceSet()
                     ? "$" + acc.getMinimumBalance()
