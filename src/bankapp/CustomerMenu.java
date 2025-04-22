@@ -236,9 +236,9 @@ public class CustomerMenu {
     }
     
     private void openAccount(Scanner scanner, BankCustomer customer) {
-        System.out.println("Would you like to open a checking account(1), savings account(2), or high-yield savings account(3)? Choose an option (1-3):");
+        System.out.println("Would you like to open a checking account (1), savings account (2), high-yield savings (3), high school account (4), or college account (5)?");
         String accountType = scanner.nextLine();
-        if (accountType.equals("1") || accountType.equals("2") || accountType.equals("3")) {
+        if (accountType.equals("1") || accountType.equals("2") || accountType.equals("3") || accountType.equals("4") || accountType.equals("5")) {
             int accountID;
             String accountTypeDescription;
             if (accountType.equals("1")) {
@@ -247,15 +247,22 @@ public class CustomerMenu {
             } else if (accountType.equals("2")) {
                 accountID = customer.addNewSavingsAccount(bankRecord);
                 accountTypeDescription = "savings (daily 0.0000027 interest rate)";
-            } else {
+            } else if (accountType.equals("3")) {
                 accountID = customer.addNewHighYieldSavingsAccount(bankRecord);
-                accountTypeDescription = "high-yield savings(daily 0.0000054 interest rate, no withdrawal within 1 day of deposits.)";
+                accountTypeDescription = "high-yield savings (daily 0.0000054 interest rate, no withdrawal same day as deposit)";
+            } else if (accountType.equals("4")) {
+                accountID = customer.addNewHighSchoolAccount(bankRecord);
+                accountTypeDescription = "high school account (max $100 withdrawal per transaction)";
+            } else {  
+                accountID = customer.addNewCollegeAccount(bankRecord);
+                accountTypeDescription = "college account";
             }
             System.out.println("New " + accountTypeDescription + " account created with ID: " + accountID);
         } else {
             System.out.println("Invalid choice. Returning to Menu.");
         }
     }
+
     
     private void freezeAccount(Scanner scanner, BankCustomer customer) {
     	try {
