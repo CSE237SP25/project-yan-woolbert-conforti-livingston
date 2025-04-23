@@ -6,26 +6,26 @@ import static org.junit.Assert.assertThrows;
 import org.junit.Test;
 
 import bankapp.BankRecord;
-import bankapp.HighSchoolStudentAccount;
+import bankapp.CollegeStudentAccount;
 
 public class CollegeStudentAccountTests {
 
 	@Test
     public void testCannotWithdrawOverMaxLimit() {
-        HighSchoolStudentAccount account = new HighSchoolStudentAccount(new BankRecord());
+        CollegeStudentAccount account = new CollegeStudentAccount(new BankRecord());
         account.deposit(200.0);
 
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
             account.withdraw(550.0); 
         });
 
-        assertEquals("Cannot withdraw more than $500.0 at once in a high school account.", e.getMessage());
+        assertEquals("Cannot withdraw more than $500.0 at once in a college account.", e.getMessage());
     }
 	
 	@Test
     public void testCanWithdrawUpToMaxLimit() {
         
-		HighSchoolStudentAccount account = new HighSchoolStudentAccount(new BankRecord());
+		CollegeStudentAccount account = new CollegeStudentAccount(new BankRecord());
         account.deposit(550.0);
         
         account.withdraw(500.0);
@@ -35,7 +35,7 @@ public class CollegeStudentAccountTests {
 	
 	@Test
     public void testFrozenAccountBlocksWithdrawal() {
-        HighSchoolStudentAccount account = new HighSchoolStudentAccount(new BankRecord());
+        CollegeStudentAccount account = new CollegeStudentAccount(new BankRecord());
         account.deposit(100.0);
         account.freezeAccount();
 
@@ -48,7 +48,7 @@ public class CollegeStudentAccountTests {
 	
 	@Test
     public void testCannotWithdrawMoreThanBalance() {
-        HighSchoolStudentAccount account = new HighSchoolStudentAccount(new BankRecord());
+        CollegeStudentAccount account = new CollegeStudentAccount(new BankRecord());
         account.deposit(50.0);
 
         Exception e = assertThrows(IllegalArgumentException.class, () -> {
@@ -60,7 +60,7 @@ public class CollegeStudentAccountTests {
 	
 	@Test
     public void testDepositAndWithdrawNormally() {
-        HighSchoolStudentAccount account = new HighSchoolStudentAccount(new BankRecord());
+        CollegeStudentAccount account = new CollegeStudentAccount(new BankRecord());
         account.deposit(100.0);
         account.withdraw(60.0);
 

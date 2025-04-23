@@ -18,7 +18,7 @@ public class CollegeStudentAccount extends BankAccount {
             throw new IllegalArgumentException("Invalid amount: must be non-negative.");
         }
         if (amount > MAX_WITHDRAWAL) {
-            throw new IllegalArgumentException("Cannot withdraw more than $" + MAX_WITHDRAWAL + " at once in a high school account.");
+            throw new IllegalArgumentException("Cannot withdraw more than $" + MAX_WITHDRAWAL + " at once in a college account.");
         }
         if (getCurrentBalance() >= amount) {
             super.withdraw(amount);
