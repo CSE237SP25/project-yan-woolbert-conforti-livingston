@@ -14,10 +14,10 @@ What user stories were completed this iteration?
 * A BankCustomer should be able to play double-or-nothing with the funds in their eligible accounts.
 * A Bank should be able to provide financial tips on the login page.
 * A BankCustomer should be able to refer a friend and get a small kickback.
-* 
-* 
-* 
-* 
+* A BankCustomer should be able to change their password.
+* A BankCustomer should be able to change their username.
+* A BankCustomer should be able to open a college account.
+* A BankCustomer should be able to open a high school account.
 
 What user stories do you intend to complete next iteration?
 * N/A
