@@ -51,6 +51,18 @@ public class BankCustomer {
         return newAccount.getAccountID();
     }
     
+    public int addNewHighSchoolAccount(BankRecord bankRecord) {
+        HighSchoolStudentAccount newAccount = new HighSchoolStudentAccount(bankRecord);
+        bankRecord.addAccount(this.userID, newAccount.getAccountID(), newAccount);
+        return newAccount.getAccountID();
+    }
+    public int addNewCollegeAccount(BankRecord bankRecord) {
+        CollegeStudentAccount newAccount = new CollegeStudentAccount(bankRecord);
+        bankRecord.addAccount(this.userID, newAccount.getAccountID(), newAccount);
+        return newAccount.getAccountID();
+    }
+    
+    
     public void removeAccount(BankRecord bankRecord, int accountID) {
         bankRecord.deleteAccount(this.userID, accountID);
     }
@@ -103,13 +115,27 @@ public class BankCustomer {
     }
         
     public void setUsername(String u) {
-        this.username = u;
+        if(this.username.equals(u)){
+            throw new IllegalArgumentException("You cannot change your username to your current username.");
+        }
+        if(this.bankRecord.isUsernameTaken(u)){
+            throw new IllegalArgumentException("This username is already taken. Please choose another username.");
+        }
+        else{
+            this.bankRecord.removeUsername(this.username);
+            this.username = u;
+            this.bankRecord.addUsername(u);
+        }
     }
     
     public int getUserID() {
         return this.userID;
     }
     
+    public void setPassword(String newPassword){
+        this.password = newPassword;
+    }
+
     public  ArrayList<Integer> getUserAccounts(BankRecord bankRecord) {
         ArrayList<Integer> accountIDs = bankRecord.getUserIDAccountIDs().get(this.userID);
         return accountIDs;

@@ -41,19 +41,41 @@ public class BankCustomerTests {
         assertEquals(customer0.getUserID() + 1, customer1.getUserID());
     }
     
-    @Test
-    public void testSetUsername() {
-        BankRecord bankRecord = new BankRecord();
-        //1. Create objects to be tested
-        BankCustomer customer = new BankCustomer("Test Customer", null, bankRecord);
-        
-        //2. Call methods to be tested
-        customer.setUsername("New Username");
 
-        //2. Use assertions to verify results both username and user ID
-        assertEquals(customer.getUsername(), "New Username");
+    @Test
+    public void testSetUsernameUpdatesUsernameListCorrectly() {
+        // Arrange
+        BankRecord bankRecord = new BankRecord();
+        BankCustomer customer = new BankCustomer("oldName", "Password123", bankRecord);
+
+        // Sanity check: oldName should be in the username list
+        assertTrue(bankRecord.isUsernameTaken("oldName"));
+        assertFalse(bankRecord.isUsernameTaken("newName"));
+
+        // Act
+        customer.setUsername("newName");
+
+        // Assert
+        assertEquals("newName", customer.getUsername());
+        assertTrue("New username should now be marked as taken", bankRecord.isUsernameTaken("newName"));
+        assertFalse("Old username should no longer be marked as taken", bankRecord.isUsernameTaken("oldName"));
     }
-    
+
+    @Test
+    public void testSetUsernameFailsIfNewUsernameAlreadyTaken() {
+        // Arrange
+        BankRecord bankRecord = new BankRecord();
+        BankCustomer customer1 = new BankCustomer("Alice", "pass1", bankRecord);
+        BankCustomer customer2 = new BankCustomer("Bob", "pass2", bankRecord);
+
+        // Act + Assert
+        try {
+            customer2.setUsername("Alice");
+            fail("Expected IllegalArgumentException to be thrown because 'Alice' is already taken.");
+        } catch (IllegalArgumentException e) {
+            assertEquals("This username is already taken. Please choose another username.", e.getMessage());
+        }
+    }
     @Test
     public void testCreateNewAccount() {
         BankRecord bankRecord = new BankRecord();

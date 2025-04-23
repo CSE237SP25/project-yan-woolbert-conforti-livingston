@@ -10,24 +10,17 @@ Team Members:
 For each iteration you should answer the following:
 
 What user stories were completed this iteration?
-* A BankRecord object should be able to save every transaction (eg. withdrawl, transfer, and interest earned).
-* A BankCustomer should be able to see their complete transaction history either in full or by account.
-* A BankCustomer should be able to merge two existing accounts of the same type.
-* A BankCustomer should be able to open a savings account.
-* A BankAccount should be able to earn interest.
-* A BankCustomer should be able to open a high-yield savings account.
-* A Bank should be able to charge an overdraft fee.
-* A Bank Customer should be able to freeze an account.
+* A BankCustomer should be able to give each BankAccount a nickname.
+* A BankCustomer should be able to play double-or-nothing with the funds in their eligible accounts.
+* A Bank should be able to provide financial tips on the login page.
+* A BankCustomer should be able to refer a friend and get a small kickback.
+* A BankCustomer should be able to change their password.
+* A BankCustomer should be able to change their username.
+* A BankCustomer should be able to open a college account.
+* A BankCustomer should be able to open a high school account.
 
 What user stories do you intend to complete next iteration?
-* A BankCustomer should be able to transfer money to another BankCustomer (with proper security).
-* A BankCustomer should be able to refer a friend and get a small kickback eg. $5.
-* A BankCustomer should be able to open a child account
-* A BankCustomer should be able to open a college account
-* A BankCustomer should be able to open a high school account
-* A BankCustomer should be able to change their password.
-* A Bank should be able to remove a BankCustomer.
-* A BankCustomer should be able to set account nicknames.
+* N/A
 
 Is there anything that you implemented but doesn't currently work?
 * No. Everything we currently implemented is fully tested and functional.
