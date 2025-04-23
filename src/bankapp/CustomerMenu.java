@@ -255,7 +255,7 @@ public class CustomerMenu {
                 accountTypeDescription = "high school account (max $100 withdrawal per transaction)";
             } else {  
                 accountID = customer.addNewCollegeAccount(bankRecord);
-                accountTypeDescription = "college account";
+                accountTypeDescription = "college account (max $500 withdrawal per transaction)";
             }
             System.out.println("New " + accountTypeDescription + " account created with ID: " + accountID);
         } else {
